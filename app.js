@@ -1,0 +1,4 @@
+/*
+    App entry point
+    Acts as the main file of the project where you initialize the app and other elements of the project.
+*/
