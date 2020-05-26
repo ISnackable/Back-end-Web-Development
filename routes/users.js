@@ -3,7 +3,7 @@
 // ------------------------------------------------------
 const express = require('express');
 const app = express();
-module.exports = app;
+module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount
 
 // ------------------------------------------------------
 // end points
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 
 // Used to add a new user to the database.
 app.post('/', (req, res) => {
-    res.statusCode = 200;
+    res.statusCode = 201;
     res.send("Content: ID of the newly created user:");
 });
 
