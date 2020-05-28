@@ -3,7 +3,6 @@
 // ------------------------------------------------------
 const express = require('express');
 const app = express();
-module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount
 const users = require('./users');
 const travel = require('./travel');
 const path = require('path');
@@ -24,3 +23,5 @@ app.all('*', (req, res) => {
     res.sendFile('public/error.html', {root: path.dirname(__dirname)});
     res.status(500);
 });
+
+module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount

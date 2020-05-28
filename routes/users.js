@@ -3,7 +3,6 @@
 // ------------------------------------------------------
 const express = require('express');
 const app = express();
-module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount
 
 // ------------------------------------------------------
 // end points
@@ -37,3 +36,5 @@ app.post('/:uid/travel/:tid/review/', (req, res) => {
     res.statusCode = 201;
     res.send("Content: ID of the newly created user:");
 })
+
+module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount

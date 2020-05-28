@@ -3,7 +3,6 @@
 // ------------------------------------------------------
 const express = require('express');
 const app = express();
-module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount
 
 // ------------------------------------------------------
 // end points
@@ -68,3 +67,5 @@ app.get('/:id/review', (req, res) => {
     ]
     `);
 });
+
+module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount
