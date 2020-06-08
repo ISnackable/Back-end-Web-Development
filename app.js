@@ -12,6 +12,7 @@ console.log("------------------------------------");
 const config = require('./config');
 const middleware = require('./middlewares');
 const routes = require('./routes');
+const db = require('./models');
 const express = require('express');
 const app = express();
 
