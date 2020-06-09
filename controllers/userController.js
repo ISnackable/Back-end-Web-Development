@@ -3,7 +3,7 @@ const userDB = require('../models/user');
 // ------------------------------------------------------
 // end points
 // ------------------------------------------------------
-// Retrieve all of the users in the database.
+// Retrieve all of the users in the database. GET Request
 exports.user_list = (req, res) => {
     userDB.getAll(function (err, result) {
         if (!err) {
@@ -14,7 +14,7 @@ exports.user_list = (req, res) => {
     });
 };
 
-// Used to add a new user to the database.
+// Used to add a new user to the database. POST Request
 exports.user_add = (req, res) => {
     var myUser = {
         username: req.body.username,
@@ -34,7 +34,7 @@ exports.user_add = (req, res) => {
     });
 };
 
-// Retrieve a single user by their id.
+// Retrieve a single user by their id. GET Request
 exports.user_get = (req, res) => {
     var id = req.params.id;
 
@@ -47,12 +47,31 @@ exports.user_get = (req, res) => {
     });
 };
 
-// Update a single user. ID and created timestamp should not be updatable.
+// Update a single user. ID and created timestamp should not be updatable. PUT Request
 exports.user_update = (req, res) => {
-    res.statusCode = 204;
+    
+    var myUser = {
+        id : req.params.id,
+        username: req.body.username,
+        email: req.body.email,
+        profile_pic_url: req.body.profile_pic_url
+    };
+
+    userDB.updateUser(myUser, function (err, result) {
+        if (!err) {
+            if (result) {
+                res.status(204).send("No Content");
+            }
+            else {
+                res.status(422).send("Unprocessable Entity")
+            }
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };
 
-// Used to add a new review to the database for a given user and travel listing.
+// Used to add a new review to the database for a given user and travel listing. POST Request
 exports.user_add_review = (req, res) => {
     res.statusCode = 201;
     res.send("Content: ID of the newly created user:");
