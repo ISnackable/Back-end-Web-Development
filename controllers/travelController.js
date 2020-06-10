@@ -71,37 +71,58 @@ exports.travel_update = (req, res) => {
 
 // Retrieves all the itineraries of a particular travel listing. GET REQUEST
 exports.travel_itineraries_list = (req, res) => {
-    res.statusCode = 200;
-    res.send(`[
-        {
-            "itineraryid": “1”,
-            "day": “1”,
-            "activity": “Visit Perth Frementle market”,
-            "created_at": "2020-06-20 18:54:57"
-        },
-        ...
-    ]
-    `);
+    var id = req.params.id;
+
+    travelDB.getItineraryById(id, function (err, result) {
+        if (!err) {
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };
 
 // Adds a one day itinerary for that travel listing. A travel listing can have a multiple day itinerary and thus we can many itinerary records for one travel listing. POST REQUEST
 exports.travel_itineraries_add = (req, res) => {
-    res.statusCode = 201;
-    res.send("Content: ID of the newly created listing:");
+    var itinerary = {
+        travelid : req.params.id,
+        day: req.body.day,
+        activity: req.body.activity,
+    };
+
+    travelDB.createItineraryById(itinerary, function (err, result) {
+        if (!err) {
+            var output = {
+                "itineraryid" : result
+            };
+
+            res.status(201).send(output);
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };
 
 // Retrieves reviews of a particular travel listing, including info like the username. (A table join is required). Note the created_at field retrieved is the creation datetime of the travel review. GET REQUEST
 exports.travel_review_get = (req, res) => {
-    res.statusCode = 200;
-    res.send(`[
-        {
-            "travelid": “1”,
-            "content": "Enjoyed the vacation! It was great!",
-            “rating”: “5”,
-            "username": "Terry Tan",
-            "created_at": "2020-06-22 18:54:57"
-        },
-        ...
-    ]
-    `);
+
+    var travelid = req.params.id
+
+    travelDB.getReviewId(travelid, function (err, result) {
+        if (!err) {
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(402).send("No Content")
+            }
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };

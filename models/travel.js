@@ -16,7 +16,7 @@ var travelDB = {
     getAll: function (callback) {
         console.log("travelDB.getAll() ...");
 
-        var sql = 'SELECT * FROM travel';
+        var sql = 'SELECT title, description, price, country, travelPeriod FROM travel';
 
         db.query(sql, [], function (err, result) {
             if (err) {
@@ -74,6 +74,67 @@ var travelDB = {
             }
         });
     },
+    getItineraryById: function (id, callback) {
+        console.log("travelDB.getItineraryById() ...");
+
+        var sql = 'SELECT itineraryid, day, activity, created_at FROM itinerary WHERE fk_travelid = ?';
+
+        db.query(sql, [id], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result);
+                }
+            }
+        });
+    },
+    createItineraryById: function (itinerary, callback) {
+        console.log("travelDB.CreateItineraryById() ...");
+
+        var sql = 'INSERT INTO itinerary (fk_travelid, day, activity) VALUES (?, ?, ?)';
+
+        db.query(sql, [itinerary.travelid, itinerary.day, itinerary.activity], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                return callback(null, result.insertId);
+            }
+        });
+    },
+    getReviewId: function (id, callback) {
+        console.log("travelDB.getReviewId() ...");
+
+        var sql = `SELECT
+            t.travelid, r.content, r.rating, u.username, r.created_at 
+        FROM 
+            review AS r, 
+            travel AS t, 
+            user AS u 
+        WHERE 
+            r.fk_travelid = t.travelid
+            AND r.fk_userid = u.userid
+            AND r.fk_travelid = ?;`;
+
+        db.query(sql, [id], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result);
+                }
+            }
+        });
+    }
 }
 
 // ------------------------------------

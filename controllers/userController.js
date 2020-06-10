@@ -73,6 +73,22 @@ exports.user_update = (req, res) => {
 
 // Used to add a new review to the database for a given user and travel listing. POST Request
 exports.user_add_review = (req, res) => {
-    res.statusCode = 201;
-    res.send("Content: ID of the newly created user:");
+    var userid = req.params.uid;
+    var travelid = req.params.tid;
+
+    var review = {
+        content: req.body.content,
+        rating: req.body.rating,
+    };
+
+    userDB.createReview(userid, travelid, review, function (err, result) {
+        if (!err) {
+            var output = {
+                "reviewid" : result
+            }
+            res.status(201).send(output);
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };

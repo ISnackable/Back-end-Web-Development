@@ -97,6 +97,20 @@ var userDB = {
 
 
     },
+    createReview: function (userid, travelid, review, callback) {
+        console.log("userDB.createReview() ...");
+
+        var sql = 'INSERT INTO review (fk_userid, fk_travelid, content, rating) VALUES (?, ?, ?, ?)';
+
+        db.query(sql, [userid, travelid, review.content, review.rating], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                return callback(null, result.insertId);
+            }
+        });
+    }
 }
 
 // ------------------------------------
