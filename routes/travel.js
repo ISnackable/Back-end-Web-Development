@@ -29,4 +29,6 @@ app.post('/:id/itinerary', travel_controller.travel_itineraries_add);
 // Retrieves reviews of a particular travel listing, including info like the username. (A table join is required). Note the created_at field retrieved is the creation datetime of the travel review.
 app.get('/:id/review', travel_controller.travel_review_get);
 
+app.post('/:id/thumbnail' ,travel_controller.travel_image_upload);
+
 module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount

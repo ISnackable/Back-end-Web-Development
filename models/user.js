@@ -86,9 +86,12 @@ var userDB = {
                         if (err) {
                             console.log(err);
                             return callback(err, null);
-                        } else {
+                        } else if (result.affectedRows == 1){
                             console.log("Updated successfully.")
-                            return callback(null, result);
+                            return callback(null, result.affectedRows);
+                        } else {
+                            console.log("Update failed.")
+                            return callback(null, result.affectedRows);
                         }
                     });
                 }

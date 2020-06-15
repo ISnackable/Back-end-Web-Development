@@ -1,4 +1,5 @@
 const travelDB = require('../models/travel');
+const middleware = require('../middlewares')
 
 // ------------------------------------------------------
 // end points
@@ -27,7 +28,7 @@ exports.travel_add = (req, res) => {
     travelDB.createTravel(travel, function (err, result) {
         if (!err) {
             var output = {
-                "travelid" : result
+                "travelid": result
             }
             res.status(201).send(output);
         } else {
@@ -52,7 +53,7 @@ exports.travel_delete = (req, res) => {
 // Updates a travel listing. PUT REQUEST
 exports.travel_update = (req, res) => {
     var travel = {
-        id : req.params.id,
+        id: req.params.id,
         title: req.body.title,
         description: req.body.description,
         price: req.body.price,
@@ -90,7 +91,7 @@ exports.travel_itineraries_list = (req, res) => {
 // Adds a one day itinerary for that travel listing. A travel listing can have a multiple day itinerary and thus we can many itinerary records for one travel listing. POST REQUEST
 exports.travel_itineraries_add = (req, res) => {
     var itinerary = {
-        travelid : req.params.id,
+        travelid: req.params.id,
         day: req.body.day,
         activity: req.body.activity,
     };
@@ -98,7 +99,7 @@ exports.travel_itineraries_add = (req, res) => {
     travelDB.createItineraryById(itinerary, function (err, result) {
         if (!err) {
             var output = {
-                "itineraryid" : result
+                "itineraryid": result
             };
 
             res.status(201).send(output);
@@ -119,10 +120,35 @@ exports.travel_review_get = (req, res) => {
                 res.status(200).send(result);
             }
             else {
-                res.status(402).send("No Content")
+                res.status(404).send("Not Found!");
             }
         } else {
             res.status(500).send("Internal Server Error");
         }
     });
 };
+
+// Upload image of a particular travel listing
+exports.travel_image_upload = (req, res) => {
+    middleware.upload(req, res, function (err) {
+        if (req.fileValidationError) {
+            res.status(500).send(req.fileValidationError);
+        }
+        else if (err) {
+            // An unknown error occurred when uploading.
+            res.status(500).send("Internal Server Error");
+        }
+        else {
+            // Everything went fine.
+            // travelDB.getReviewId(req.file, function (err, result) {
+            //     if (!err) {
+            //         res.status(204).send("No Content");
+
+            //     } else {
+            //         res.status(500).send("Internal Server Error");
+            //     }
+            // });
+            res.status(204).send("No Content");
+        }
+    })
+}

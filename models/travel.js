@@ -110,15 +110,15 @@ var travelDB = {
     getReviewId: function (id, callback) {
         console.log("travelDB.getReviewId() ...");
 
-        var sql = `SELECT
+        var sql = `SELECT 
             t.travelid, r.content, r.rating, u.username, r.created_at 
         FROM 
             review AS r, 
             travel AS t, 
             user AS u 
         WHERE 
-            r.fk_travelid = t.travelid
-            AND r.fk_userid = u.userid
+            r.fk_travelid = t.travelid 
+            AND r.fk_userid = u.userid 
             AND r.fk_travelid = ?;`;
 
         db.query(sql, [id], function (err, result) {
