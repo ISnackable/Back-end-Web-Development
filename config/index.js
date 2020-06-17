@@ -1,6 +1,13 @@
 /*
     Config stuff 
 */
+console.log("------------------------------------");
+console.log("config > index.js");
+console.log("------------------------------------");
+
+// ------------------------------------------------------
+// load modules
+// ------------------------------------------------------
 const dotenv = require('dotenv').config();
 
 if (dotenv.error) {

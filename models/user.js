@@ -1,3 +1,7 @@
+console.log("------------------------------------");
+console.log("models > users.js");
+console.log("------------------------------------");
+
 /**
  * This file is responsible for read/write database transactions
  * for the user table in sptravel schema.

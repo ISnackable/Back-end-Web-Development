@@ -1,10 +1,16 @@
-/*
-    middleware functions
-*/
+console.log("------------------------------------");
+console.log("middlewares > index.js");
+console.log("------------------------------------");
+// ------------------------------------------------------
+// load modules
+// ------------------------------------------------------
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
 
+// ------------------------------------------------------
+// multer config
+// ------------------------------------------------------
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, path.dirname(__dirname) + '/public/uploads')
@@ -15,6 +21,9 @@ var storage = multer.diskStorage({
     }
 })
 
+// ------------------------------------------------------
+//  middleware functions
+// ------------------------------------------------------
 const middleware = {
     urlencodedParser: bodyParser.urlencoded({ extended: false }),
     jsonParser: bodyParser.json(),

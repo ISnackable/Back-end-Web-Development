@@ -1,3 +1,7 @@
+console.log("------------------------------------");
+console.log("models > travel.js");
+console.log("------------------------------------");
+
 /**
  * This file is responsible for read/write database transactions
  * for the user table in sptravel schema.
@@ -16,7 +20,7 @@ var travelDB = {
     getAll: function (callback) {
         console.log("travelDB.getAll() ...");
 
-        var sql = 'SELECT title, description, price, country, travelPeriod FROM travel';
+        var sql = 'SELECT title, description, price, country, DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod" FROM travel';
 
         db.query(sql, [], function (err, result) {
             if (err) {
@@ -132,6 +136,114 @@ var travelDB = {
                 else {
                     return callback(null, result);
                 }
+            }
+        });
+    },
+    getById: function (id, callback) {
+        console.log("travelDB.getById() ...");
+    
+        var sql = `
+            SELECT 
+                t.title, 
+                t.description, 
+                t.price, 
+                t.country, 
+                DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod", 
+                t.thumbnail
+            FROM
+                travel AS t
+            WHERE
+                t.travelid = ?;`;
+    
+        db.query(sql, [id], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result[0]);
+                }
+            }
+        });
+    },
+    imageUpload: function (filename, travelid, callback) {
+        console.log("travelDB.imageUpload() ...");
+        
+        var sql = 'UPDATE travel SET thumbnail = ? WHERE travelid = ?';
+        
+        db.query(sql, [filename, travelid], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                return callback(null, result.affectedRows);
+            }
+        });
+    },
+    getPromotionById: function (id, callback) {
+        console.log("travelDB.getPromotionById() ...");
+    
+        var sql = `
+            SELECT 
+                t.travelid,
+                t.title, 
+                t.description, 
+                t.price, 
+                t.country, 
+                DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod", 
+                t.thumbnail, 
+                p.start_date, 
+                p.end_date, 
+                p.discount_amount
+            FROM
+                promotion AS p,
+                travel AS t
+            WHERE
+                p.fk_travelid = t.travelid AND 
+                p.fk_travelid = ?;`;
+    
+        db.query(sql, [id], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result[0]);
+                }
+            }
+        });
+    },
+    createPromotionById: function (promotion, callback) {
+        console.log("travelDB.createPromotionById() ...");
+
+        var sql = 'INSERT INTO promotion (fk_travelid, start_date, end_date, discount_amount) VALUES (?, ?, ?, ?)';
+
+        db.query(sql, [promotion.travelid, promotion.start_date, promotion.end_date, promotion.discount_amount], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                return callback(null, result.insertId);
+            }
+        });
+    },
+    deletePromotion: function (id, callback) {
+        console.log("travelDB.deletePromotion() ...");
+
+        var sql = 'DELETE FROM promotion WHERE fk.travelid = ?';
+
+        db.query(sql, [id], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                return callback(null, result);
             }
         });
     }

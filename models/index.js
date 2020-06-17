@@ -1,3 +1,7 @@
+console.log("------------------------------------");
+console.log("models > index.js");
+console.log("------------------------------------");
+
 /*
     The purpose of this file is to provide connections to the
     backend database layer.
@@ -16,7 +20,8 @@ var conn = mysql.createConnection({
     host: config.hostname,
     user: config.username,
     password: config.password,
-    database: config.database
+    database: config.database,
+    dateStrings: true
 });
 
 conn.connect(function (err) {

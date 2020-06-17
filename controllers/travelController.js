@@ -1,3 +1,10 @@
+console.log("------------------------------------");
+console.log("controllers > travelController.js");
+console.log("------------------------------------");
+
+// ------------------------------------------------------
+// load modules
+// ------------------------------------------------------
 const travelDB = require('../models/travel');
 const middleware = require('../middlewares')
 
@@ -17,29 +24,38 @@ exports.travel_list = (req, res) => {
 
 // Used to add a new travel listing listing to the database. POST REQUEST
 exports.travel_add = (req, res) => {
-    var travel = {
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        country: req.body.country,
-        travelPeriod: req.body.travelPeriod
-    };
+    var travelPeriod = new Date(req.body.travelPeriod);
 
-    travelDB.createTravel(travel, function (err, result) {
-        if (!err) {
-            var output = {
-                "travelid": result
+    // Check if travelPeriod request is valid 
+    if (travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) {
+        var travel = {
+            title: req.body.title,
+            description: req.body.description,
+            price: req.body.price,
+            country: req.body.country,
+            travelPeriod: travelPeriod
+        };
+
+        travelDB.createTravel(travel, function (err, result) {
+            if (!err) {
+                var output = {
+                    "travelid": result
+                }
+                res.status(201).send(output);
+            } else {
+                res.status(500).send("Internal Server Error");
             }
-            res.status(201).send(output);
-        } else {
-            res.status(500).send("Internal Server Error");
-        }
-    });
+        });
+    }
+    else {
+        res.status(400).send("Bad Request");
+    }
+
 };
 
 // Deletes a travel listing given its id. The associated itinerary and reviews related to the travel listing would also be deleted. Idempotent. DELETE REQUEST 
 exports.travel_delete = (req, res) => {
-    var id = req.params.id
+    var id = req.params.id;
 
     travelDB.deleteTravel(id, function (err, result) {
         if (!err) {
@@ -111,8 +127,7 @@ exports.travel_itineraries_add = (req, res) => {
 
 // Retrieves reviews of a particular travel listing, including info like the username. (A table join is required). Note the created_at field retrieved is the creation datetime of the travel review. GET REQUEST
 exports.travel_review_get = (req, res) => {
-
-    var travelid = req.params.id
+    var travelid = req.params.id;
 
     travelDB.getReviewId(travelid, function (err, result) {
         if (!err) {
@@ -129,10 +144,28 @@ exports.travel_review_get = (req, res) => {
 };
 
 // Upload image of a particular travel listing
+exports.travel_get = (req, res) => {
+    var id = req.params.id;
+
+    travelDB.getById(id, function (err, result) {
+        if (!err) {
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
+}
+
+// Upload image of a particular travel listing
 exports.travel_image_upload = (req, res) => {
     middleware.upload(req, res, function (err) {
         if (req.fileValidationError) {
-            res.status(500).send(req.fileValidationError);
+            res.status(415).send(req.fileValidationError);
         }
         else if (err) {
             // An unknown error occurred when uploading.
@@ -140,15 +173,68 @@ exports.travel_image_upload = (req, res) => {
         }
         else {
             // Everything went fine.
-            // travelDB.getReviewId(req.file, function (err, result) {
-            //     if (!err) {
-            //         res.status(204).send("No Content");
+            var travelid = req.params.id;
 
-            //     } else {
-            //         res.status(500).send("Internal Server Error");
-            //     }
-            // });
-            res.status(204).send("No Content");
+            travelDB.imageUpload(req.file.filename, travelid, function (err, result) {
+                if (!err) {
+                    res.status(204).send("No Content");
+
+                } else {
+                    res.status(500).send("Internal Server Error");
+                }
+            });
         }
     })
 }
+
+//  Retrieve a single travel by their id. GET Request
+exports.travel_promotion_get = (req, res) => {
+    var id = req.params.id;
+
+    travelDB.getPromotionById(id, function (err, result) {
+        if (!err) {
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
+};
+
+// Add the travel listing's promotion period, discount amount. POST Request
+exports.travel_promotion_add = (req, res) => {
+    var promotion = {
+        travelid: req.params.id,
+        day: req.body.day,
+        activity: req.body.activity,
+    };
+
+    // travelDB.createPromotionById(promotion, function (err, result) {
+    //     if (!err) {
+    //         var output = {
+    //             "promotionid": result
+    //         };
+
+    //         res.status(201).send(output);
+    //     } else {
+    //         res.status(500).send("Internal Server Error");
+    //     }
+    // });
+};
+
+// Delete the travel listing's promotion period, discount amount. DELETE Request
+exports.travel_promotion_delete = (req, res) => {
+    var id = req.params.id;
+
+    // travelDB.deletePromotion(id, function (err, result) {
+    //     if (!err) {
+    //         res.status(204).send("No Content");
+    //     } else {
+    //         res.status(500).send("Internal Server Error");
+    //     }
+    // });
+};

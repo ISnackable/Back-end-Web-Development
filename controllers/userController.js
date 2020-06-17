@@ -1,3 +1,10 @@
+console.log("------------------------------------");
+console.log("controllers > userController.js");
+console.log("------------------------------------");
+
+// ------------------------------------------------------
+// load modules
+// ------------------------------------------------------
 const userDB = require('../models/user');
 
 // ------------------------------------------------------
@@ -40,7 +47,12 @@ exports.user_get = (req, res) => {
 
     userDB.getById(id, function (err, result) {
         if (!err) {
-            res.status(200).send(result);
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
         } else {
             res.status(500).send("Internal Server Error");
         }
