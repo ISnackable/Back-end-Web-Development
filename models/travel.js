@@ -194,7 +194,8 @@ var travelDB = {
                 t.price, 
                 t.country, 
                 DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod", 
-                t.thumbnail, 
+                t.thumbnail,
+                p.promotionid,
                 p.start_date, 
                 p.end_date, 
                 p.discount_amount
@@ -214,7 +215,7 @@ var travelDB = {
                     return callback(null, null);
                 }
                 else {
-                    return callback(null, result[0]);
+                    return callback(null, result);
                 }
             }
         });
@@ -233,12 +234,12 @@ var travelDB = {
             }
         });
     },
-    deletePromotion: function (id, callback) {
+    deletePromotion: function (travelid, promotionid, callback) {
         console.log("travelDB.deletePromotion() ...");
 
-        var sql = 'DELETE FROM promotion WHERE fk.travelid = ?';
+        var sql = 'DELETE FROM promotion WHERE fk_travelid = ? AND promotionid = ?';
 
-        db.query(sql, [id], function (err, result) {
+        db.query(sql, [travelid, promotionid], function (err, result) {
             if (err) {
                 console.log(err);
                 return callback(err, null);

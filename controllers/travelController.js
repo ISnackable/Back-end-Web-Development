@@ -209,32 +209,34 @@ exports.travel_promotion_get = (req, res) => {
 exports.travel_promotion_add = (req, res) => {
     var promotion = {
         travelid: req.params.id,
-        day: req.body.day,
-        activity: req.body.activity,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date,
+        discount_amount: req.body.discount_amount
     };
 
-    // travelDB.createPromotionById(promotion, function (err, result) {
-    //     if (!err) {
-    //         var output = {
-    //             "promotionid": result
-    //         };
+    travelDB.createPromotionById(promotion, function (err, result) {
+        if (!err) {
+            var output = {
+                "promotionid": result
+            };
 
-    //         res.status(201).send(output);
-    //     } else {
-    //         res.status(500).send("Internal Server Error");
-    //     }
-    // });
+            res.status(201).send(output);
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };
 
 // Delete the travel listing's promotion period, discount amount. DELETE Request
 exports.travel_promotion_delete = (req, res) => {
-    var id = req.params.id;
+    var travelid = req.params.tid;
+    var promotionid = req.params.pid;
 
-    // travelDB.deletePromotion(id, function (err, result) {
-    //     if (!err) {
-    //         res.status(204).send("No Content");
-    //     } else {
-    //         res.status(500).send("Internal Server Error");
-    //     }
-    // });
+    travelDB.deletePromotion(travelid, promotionid, function (err, result) {
+        if (!err) {
+            res.status(204).send("No Content");
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    });
 };
