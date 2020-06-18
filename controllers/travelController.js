@@ -43,14 +43,18 @@ exports.travel_add = (req, res) => {
                 }
                 res.status(201).send(output);
             } else {
-                res.status(500).send("Internal Server Error");
+                if (err.code == 'ER_DUP_ENTRY') {
+                    res.status(409).send("Conflict. Duplicated entry found!");
+                }
+                else {
+                    res.status(500).send("Internal Server Error");
+                }
             }
         });
     }
     else {
         res.status(400).send("Bad Request");
     }
-
 };
 
 // Deletes a travel listing given its id. The associated itinerary and reviews related to the travel listing would also be deleted. Idempotent. DELETE REQUEST 
@@ -68,22 +72,39 @@ exports.travel_delete = (req, res) => {
 
 // Updates a travel listing. PUT REQUEST
 exports.travel_update = (req, res) => {
-    var travel = {
-        id: req.params.id,
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        country: req.body.country,
-        travelPeriod: req.body.travelPeriod
-    };
+    var travelPeriod = new Date(req.body.travelPeriod);
 
-    travelDB.updateTravel(travel, function (err, result) {
-        if (!err) {
-            res.status(204).send("No Content");
-        } else {
-            res.status(500).send("Internal Server Error");
-        }
-    });
+    if (travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) {
+        var travel = {
+            id: req.params.id,
+            title: req.body.title,
+            description: req.body.description,
+            price: req.body.price,
+            country: req.body.country,
+            travelPeriod: travelPeriod
+        };
+
+        travelDB.updateTravel(travel, function (err, result) {
+            if (!err) {
+                if (result.affectedRows) {
+                    res.status(204).send("No Content");
+                }
+                else {
+                    res.status(202).send("Accepted");
+                }
+            } else {
+                if (err.code == 'ER_DUP_ENTRY') {
+                    res.status(409).send("Conflict. Duplicated entry found!");
+                }
+                else {
+                    res.status(500).send("Internal Server Error");
+                }
+            }
+        });
+    }
+    else {
+        res.status(400).send("Bad Request");
+    }
 };
 
 // Retrieves all the itineraries of a particular travel listing. GET REQUEST
@@ -120,7 +141,12 @@ exports.travel_itineraries_add = (req, res) => {
 
             res.status(201).send(output);
         } else {
-            res.status(500).send("Internal Server Error");
+            if (err.code == 'ER_DUP_ENTRY') {
+                res.status(409).send("Conflict. Duplicated entry found!");
+            }
+            else {
+                res.status(500).send("Internal Server Error");
+            }
         }
     });
 };
@@ -164,25 +190,30 @@ exports.travel_get = (req, res) => {
 // Upload image of a particular travel listing
 exports.travel_image_upload = (req, res) => {
     middleware.upload(req, res, function (err) {
-        if (req.fileValidationError) {
-            res.status(415).send(req.fileValidationError);
-        }
-        else if (err) {
-            // An unknown error occurred when uploading.
-            res.status(500).send("Internal Server Error");
+        if (!req.file) {
+            res.status(400).send('No files selected');
         }
         else {
-            // Everything went fine.
-            var travelid = req.params.id;
+            if (req.fileValidationError) {
+                res.status(415).send(req.fileValidationError);
+            }
+            else if (err) {
+                // An unknown error occurred when uploading.
+                res.status(500).send("Internal Server Error");
+            }
+            else {
+                // Everything went fine.
+                var travelid = req.params.id;
 
-            travelDB.imageUpload(req.file.filename, travelid, function (err, result) {
-                if (!err) {
-                    res.status(204).send("No Content");
+                travelDB.imageUpload(req.file.filename, travelid, function (err, result) {
+                    if (!err) {
+                        res.status(204).send("No Content");
 
-                } else {
-                    res.status(500).send("Internal Server Error");
-                }
-            });
+                    } else {
+                        res.status(500).send("Internal Server Error");
+                    }
+                });
+            }
         }
     })
 }
@@ -207,24 +238,32 @@ exports.travel_promotion_get = (req, res) => {
 
 // Add the travel listing's promotion period, discount amount. POST Request
 exports.travel_promotion_add = (req, res) => {
-    var promotion = {
-        travelid: req.params.id,
-        start_date: req.body.start_date,
-        end_date: req.body.end_date,
-        discount_amount: req.body.discount_amount
-    };
+    var start_date = new Date(req.body.start_date);
+    var end_date = new Date(req.body.end_date);
 
-    travelDB.createPromotionById(promotion, function (err, result) {
-        if (!err) {
-            var output = {
-                "promotionid": result
-            };
+    if ((start_date.getMonth() > 0 && start_date.getMonth() <= 12) && (end_date.getMonth() > 0 && end_date.getMonth() <= 12)) {
+        var promotion = {
+            travelid: req.params.id,
+            start_date: start_date,
+            end_date: end_date,
+            discount_amount: req.body.discount_amount
+        };
 
-            res.status(201).send(output);
-        } else {
-            res.status(500).send("Internal Server Error");
-        }
-    });
+        travelDB.createPromotionById(promotion, function (err, result) {
+            if (!err) {
+                var output = {
+                    "promotionid": result
+                };
+
+                res.status(201).send(output);
+            } else {
+                res.status(500).send("Internal Server Error");
+            }
+        });
+    }
+    else {
+        res.status(400).send("Bad Request");
+    }
 };
 
 // Delete the travel listing's promotion period, discount amount. DELETE Request

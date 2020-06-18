@@ -33,10 +33,15 @@ exports.user_add = (req, res) => {
         if (!err) {
             var output = {
                 "userid" : result
-            }
+            };
             res.status(201).send(output);
         } else {
-            res.status(500).send("Internal Server Error");
+            if (err.code == 'ER_DUP_ENTRY') {
+                res.status(409).send("Conflict. Duplicated entry found!");
+            }
+            else {
+                res.status(500).send("Internal Server Error");
+            }
         }
     });
 };
@@ -75,7 +80,8 @@ exports.user_update = (req, res) => {
                 res.status(204).send("No Content");
             }
             else {
-                res.status(422).send("Unprocessable Entity")
+                // The new username provided already exists.
+                res.status(422).send("Unprocessable Entity");
             }
         } else {
             res.status(500).send("Internal Server Error");
@@ -100,7 +106,12 @@ exports.user_add_review = (req, res) => {
             }
             res.status(201).send(output);
         } else {
-            res.status(500).send("Internal Server Error");
+            if (err.code == 'ER_DUP_ENTRY') {
+                res.status(409).send("Conflict. Duplicated entry found!");
+            }
+            else {
+                res.status(500).send("Internal Server Error");
+            }
         }
     });
 };
