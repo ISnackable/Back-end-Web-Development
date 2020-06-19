@@ -7,6 +7,9 @@ console.log("------------------------------------");
 // ------------------------------------------------------
 const travelDB = require('../models/travel');
 const middleware = require('../middlewares')
+const FileType = require('file-type');
+const path = require('path');
+const fs = require('fs')
 
 // ------------------------------------------------------
 // end points
@@ -191,31 +194,37 @@ exports.travel_get = (req, res) => {
 exports.travel_image_upload = (req, res) => {
     middleware.upload(req, res, function (err) {
         if (!req.file) {
-            res.status(400).send('No files selected');
+            if (req.fileValidationError) return res.status(415).send(req.fileValidationError);
+            return res.status(400).send('No files selected');
         }
         else {
-            if (req.fileValidationError) {
-                res.status(415).send(req.fileValidationError);
-            }
-            else if (err) {
-                // An unknown error occurred when uploading.
-                res.status(500).send("Internal Server Error");
-            }
-            else {
-                // Everything went fine.
-                var travelid = req.params.id;
-
-                travelDB.imageUpload(req.file.filename, travelid, function (err, result) {
-                    if (!err) {
-                        res.status(204).send("No Content");
-
-                    } else {
-                        res.status(500).send("Internal Server Error");
-                    }
-                });
-            }
+            if (err) return res.status(500).send("Internal Server Error");
+            // Final check (By checking magic bytes of local file)
+            (async () => {
+                var {ext, mime} = await FileType.fromFile(path.dirname(__dirname) + "/public/uploads/" + req.file.filename);
+                //=> {ext: 'png', mime: 'image/png'}
+                if (ext !== 'jpg' || mime !== 'image/jpeg') {
+                    fs.unlink(path.dirname(__dirname,) + "/public/uploads/" + req.file.filename, (err) => {
+                        if (err) {
+                            console.error(err);
+                            return res.status(500).send("Internal Server Error");
+                        }
+                        //file removed
+                        return res.status(415).send("Only .jpg images are allowed");
+                    })
+                }
+                else {
+                    // Everything went fine.
+                    var travelid = req.params.id;
+        
+                    travelDB.imageUpload(req.file.filename, travelid, function (err, result) {
+                        if(err) return res.status(500).send("Internal Server Error");
+                        return res.status(204).send("No Content");
+                    });
+                }
+            })();
         }
-    })
+    });
 }
 
 //  Retrieve a single travel by their id. GET Request

@@ -32,7 +32,7 @@ const middleware = {
         limits : { fileSize: 1024 * 1024 },
         fileFilter: function (req, file, callback) {
             var ext = path.extname(file.originalname);
-            if (file.mimetype !== "image/jpg" && ext !== '.jpg' && ext !== '.JPG') {
+            if (file.mimetype !== "image/jpeg" || ext !== '.jpg' && ext !== '.JPG') {
                 req.fileValidationError = 'Only .jpg images are allowed';
                 return callback(new Error('Only .jpg images are allowed'), false);
             }
