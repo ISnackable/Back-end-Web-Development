@@ -6,7 +6,8 @@ console.log("------------------------------------");
 // load modules
 // ------------------------------------------------------
 const travelDB = require('../models/travel');
-const middleware = require('../middlewares')
+const utils = require('../utils');
+const middleware = require('../middlewares');
 const FileType = require('file-type');
 const path = require('path');
 const fs = require('fs')
@@ -18,7 +19,12 @@ const fs = require('fs')
 exports.travel_list = (req, res) => {
     travelDB.getAll(function (err, result) {
         if (!err) {
-            res.status(200).send(result);
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
         } else {
             res.status(500).send("Internal Server Error");
         }
@@ -64,6 +70,8 @@ exports.travel_add = (req, res) => {
 exports.travel_delete = (req, res) => {
     var id = req.params.id;
 
+    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
+
     travelDB.deleteTravel(id, function (err, result) {
         if (!err) {
             res.status(204).send("No Content");
@@ -76,10 +84,11 @@ exports.travel_delete = (req, res) => {
 // Updates a travel listing. PUT REQUEST
 exports.travel_update = (req, res) => {
     var travelPeriod = new Date(req.body.travelPeriod);
+    var id = req.params.id;
 
-    if (travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) {
+    if ((travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) && utils.isNumeric(id)) {
         var travel = {
-            id: req.params.id,
+            id: id,
             title: req.body.title,
             description: req.body.description,
             price: req.body.price,
@@ -114,6 +123,8 @@ exports.travel_update = (req, res) => {
 exports.travel_itineraries_list = (req, res) => {
     var id = req.params.id;
 
+    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
+
     travelDB.getItineraryById(id, function (err, result) {
         if (!err) {
             if (result) {
@@ -135,6 +146,8 @@ exports.travel_itineraries_add = (req, res) => {
         day: req.body.day,
         activity: req.body.activity,
     };
+
+    if (!utils.isNumeric(itinerary.travelid)) return res.status(400).send("Bad Request");
 
     travelDB.createItineraryById(itinerary, function (err, result) {
         if (!err) {
@@ -158,6 +171,8 @@ exports.travel_itineraries_add = (req, res) => {
 exports.travel_review_get = (req, res) => {
     var travelid = req.params.id;
 
+    if (!utils.isNumeric(travelid)) return res.status(400).send("Bad Request");
+
     travelDB.getReviewId(travelid, function (err, result) {
         if (!err) {
             if (result) {
@@ -176,6 +191,8 @@ exports.travel_review_get = (req, res) => {
 exports.travel_get = (req, res) => {
     var id = req.params.id;
 
+    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
+
     travelDB.getById(id, function (err, result) {
         if (!err) {
             if (result) {
@@ -192,6 +209,10 @@ exports.travel_get = (req, res) => {
 
 // Upload image of a particular travel listing
 exports.travel_image_upload = (req, res) => {
+    var travelid = req.params.id;
+    
+    if (!utils.isNumeric(travelid)) return res.status(400).send("Bad Request");
+
     middleware.upload(req, res, function (err) {
         if (!req.file) {
             if (req.fileValidationError) return res.status(415).send(req.fileValidationError);
@@ -202,9 +223,9 @@ exports.travel_image_upload = (req, res) => {
             // Final check (By checking magic bytes of local file)
             (async () => {
                 var {ext, mime} = await FileType.fromFile(path.dirname(__dirname) + "/public/uploads/" + req.file.filename);
-                //=> {ext: 'png', mime: 'image/png'}
+                //=> {ext: 'jpg', mime: 'image/jpeg'}
                 if (ext !== 'jpg' || mime !== 'image/jpeg') {
-                    fs.unlink(path.dirname(__dirname,) + "/public/uploads/" + req.file.filename, (err) => {
+                    fs.unlink(path.dirname(__dirname) + "/public/uploads/" + req.file.filename, (err) => {
                         if (err) {
                             console.error(err);
                             return res.status(500).send("Internal Server Error");
@@ -215,10 +236,8 @@ exports.travel_image_upload = (req, res) => {
                 }
                 else {
                     // Everything went fine.
-                    var travelid = req.params.id;
-        
                     travelDB.imageUpload(req.file.filename, travelid, function (err, result) {
-                        if(err) return res.status(500).send("Internal Server Error");
+                        if (err) return res.status(500).send("Internal Server Error");
                         return res.status(204).send("No Content");
                     });
                 }
@@ -230,6 +249,8 @@ exports.travel_image_upload = (req, res) => {
 //  Retrieve a single travel by their id. GET Request
 exports.travel_promotion_get = (req, res) => {
     var id = req.params.id;
+
+    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
 
     travelDB.getPromotionById(id, function (err, result) {
         if (!err) {
@@ -249,10 +270,11 @@ exports.travel_promotion_get = (req, res) => {
 exports.travel_promotion_add = (req, res) => {
     var start_date = new Date(req.body.start_date);
     var end_date = new Date(req.body.end_date);
+    var travelid = req.params.id;
 
-    if ((start_date.getMonth() > 0 && start_date.getMonth() <= 12) && (end_date.getMonth() > 0 && end_date.getMonth() <= 12)) {
+    if (((start_date.getMonth() > 0 && start_date.getMonth() <= 12) && (end_date.getMonth() > 0 && end_date.getMonth() <= 12)) && (utils.isNumeric(travelid))) {
         var promotion = {
-            travelid: req.params.id,
+            travelid: travelid,
             start_date: start_date,
             end_date: end_date,
             discount_amount: req.body.discount_amount
@@ -266,7 +288,12 @@ exports.travel_promotion_add = (req, res) => {
 
                 res.status(201).send(output);
             } else {
-                res.status(500).send("Internal Server Error");
+                if (err.code == 'ER_DUP_ENTRY') {
+                    res.status(409).send("Conflict. Duplicated entry found!");
+                }
+                else {
+                    res.status(500).send("Internal Server Error");
+                }
             }
         });
     }
@@ -279,6 +306,8 @@ exports.travel_promotion_add = (req, res) => {
 exports.travel_promotion_delete = (req, res) => {
     var travelid = req.params.tid;
     var promotionid = req.params.pid;
+
+    if (!utils.isNumeric(travelid) || !utils.isNumeric(promotionid)) return res.status(400).send("Bad Request");
 
     travelDB.deletePromotion(travelid, promotionid, function (err, result) {
         if (!err) {

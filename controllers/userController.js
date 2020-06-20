@@ -6,6 +6,7 @@ console.log("------------------------------------");
 // load modules
 // ------------------------------------------------------
 const userDB = require('../models/user');
+const utils = require('../utils');
 
 // ------------------------------------------------------
 // end points
@@ -14,7 +15,12 @@ const userDB = require('../models/user');
 exports.user_list = (req, res) => {
     userDB.getAll(function (err, result) {
         if (!err) {
-            res.status(200).send(result);
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
         } else {
             res.status(500).send("Internal Server Error");
         }
@@ -50,6 +56,8 @@ exports.user_add = (req, res) => {
 exports.user_get = (req, res) => {
     var id = req.params.id;
 
+    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
+
     userDB.getById(id, function (err, result) {
         if (!err) {
             if (result) {
@@ -73,6 +81,8 @@ exports.user_update = (req, res) => {
         email: req.body.email,
         profile_pic_url: req.body.profile_pic_url
     };
+
+    if (!utils.isNumeric(myUser.id)) return res.status(400).send("Bad Request");
 
     userDB.updateUser(myUser, function (err, result) {
         if (!err) {
@@ -98,6 +108,8 @@ exports.user_add_review = (req, res) => {
         content: req.body.content,
         rating: req.body.rating,
     };
+
+    if (!utils.isNumeric(userid) || !utils.isNumeric(travelid)) return res.status(400).send("Bad Request");
 
     userDB.createReview(userid, travelid, review, function (err, result) {
         if (!err) {
