@@ -107,6 +107,5 @@ dist
 public/uploads
 *.txt
 *.sql
-docs/README.md
-docs/Assignment.postman_collection.json
+docs/
 *.docx
