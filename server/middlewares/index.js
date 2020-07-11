@@ -10,6 +10,7 @@ const path = require('path');
 const config = require('../config');
 const utils = require('../utils');
 const jwt = require('jsonwebtoken');
+const { type } = require('os');
 
 // ------------------------------------------------------
 // multer config
@@ -94,6 +95,23 @@ const middleware = {
                     next();
                 }
             });
+        }
+    },
+    userAuthorization: (req, res, next) => {
+        try {
+            var id = parseInt(req.params.id);
+            var userid = parseInt(req.decodedToken.userid);
+            var role = req.decodedToken.role;
+        
+            if (userid !== id) {
+                if (role !== 'admin') {
+                    return res.status(403).send("Forbidden");
+                }
+            }
+            return next();
+        }
+        catch (err) {
+            return res.status(500).send("Internal Server Error");
         }
     }
 };

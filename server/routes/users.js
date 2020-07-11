@@ -23,7 +23,7 @@ app.post('/', user_controller.user_add);
 app.get('/:id', middleware.idSanitation, user_controller.user_get);
 
 // Update a single user. ID and created timestamp should not be updatable. PUT Request
-app.put('/:id', middleware.verifyToken, middleware.idSanitation, user_controller.user_update);
+app.put('/:id', middleware.verifyToken, middleware.idSanitation, middleware.userAuthorization, user_controller.user_update);
 
 // Login a single user. POST REQUEST
 app.post('/login', user_controller.user_login);

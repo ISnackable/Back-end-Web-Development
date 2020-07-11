@@ -82,11 +82,6 @@ exports.user_update = (req, res) => {
         profile_pic_url: req.body.profile_pic_url
     };
 
-    var userid = req.decodedToken.userid;
-    var role = req.decodedToken.role;
-
-    if (role !== 'admin') return res.status(403).send("Forbidden");
-
     userDB.updateUser(myUser, function (err, result) {
         if (!err) {
             if (result) {
