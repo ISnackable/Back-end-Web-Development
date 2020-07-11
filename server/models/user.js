@@ -17,6 +17,29 @@ console.log("------------------------------------");
 var db = require('./index.js');
 
 var userDB = {
+    loginUser: function (username, password, callback) {
+        console.log("userDB.loginUser() ...");
+
+        var sql = 'SELECT userid, username, email, role, profile_pic_url FROM user WHERE username=? and password=?';
+
+        db.query(sql, [username, password], function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    // sanity check
+                    console.log("result: " + JSON.stringify(result));
+                    return callback(null, result[0]);
+                }
+            }
+        });
+
+    },
     getAll: function (callback) {
         console.log("userDB.getAll() ...");
 
@@ -90,7 +113,7 @@ var userDB = {
                         if (err) {
                             console.log(err);
                             return callback(err, null);
-                        } else if (result.affectedRows == 1){
+                        } else if (result.affectedRows == 1) {
                             console.log("Updated successfully.")
                             return callback(null, result.affectedRows);
                         } else {

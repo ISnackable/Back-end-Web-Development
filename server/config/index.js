@@ -23,6 +23,7 @@ if (dotenv.error) {
     -- DB_USERNAME=<database username>                                                 --
     -- DB_PASSWORD=<database passsword>                                                --
     -- DB_DATABASE=<database name>                                                     --
+    -- SECRET=<jwt secret>                                                             --
     -------------------------------------------------------------------------------------`
 }
 
@@ -31,7 +32,8 @@ const config = {
     port : process.env.EXPRESS_PORT,
     username : process.env.DB_USERNAME,
     password : process.env.DB_PASSWORD,
-    database : process.env.DB_DATABASE
+    database : process.env.DB_DATABASE,
+    JWT_SECRET : process.env.SECRET
 };
 
 module.exports = config;

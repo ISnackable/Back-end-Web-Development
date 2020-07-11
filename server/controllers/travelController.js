@@ -70,11 +70,14 @@ exports.travel_add = (req, res) => {
 exports.travel_delete = (req, res) => {
     var id = req.params.id;
 
-    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
-
     travelDB.deleteTravel(id, function (err, result) {
         if (!err) {
-            res.status(204).send("No Content");
+            if (result) {
+                res.status(200).send("No Content");
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
         } else {
             res.status(500).send("Internal Server Error");
         }
@@ -123,8 +126,6 @@ exports.travel_update = (req, res) => {
 exports.travel_itineraries_list = (req, res) => {
     var id = req.params.id;
 
-    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
-
     travelDB.getItineraryById(id, function (err, result) {
         if (!err) {
             if (result) {
@@ -146,8 +147,6 @@ exports.travel_itineraries_add = (req, res) => {
         day: req.body.day,
         activity: req.body.activity,
     };
-
-    if (!utils.isNumeric(itinerary.travelid)) return res.status(400).send("Bad Request");
 
     travelDB.createItineraryById(itinerary, function (err, result) {
         if (!err) {
@@ -171,8 +170,6 @@ exports.travel_itineraries_add = (req, res) => {
 exports.travel_review_get = (req, res) => {
     var travelid = req.params.id;
 
-    if (!utils.isNumeric(travelid)) return res.status(400).send("Bad Request");
-
     travelDB.getReviewId(travelid, function (err, result) {
         if (!err) {
             if (result) {
@@ -187,11 +184,9 @@ exports.travel_review_get = (req, res) => {
     });
 };
 
-// Upload image of a particular travel listing
+// Retrieve a single travel by their id. GET Request
 exports.travel_get = (req, res) => {
     var id = req.params.id;
-
-    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
 
     travelDB.getById(id, function (err, result) {
         if (!err) {
@@ -210,8 +205,6 @@ exports.travel_get = (req, res) => {
 // Upload image of a particular travel listing
 exports.travel_image_upload = (req, res) => {
     var travelid = req.params.id;
-    
-    if (!utils.isNumeric(travelid)) return res.status(400).send("Bad Request");
 
     middleware.upload(req, res, function (err) {
         if (!req.file) {
@@ -246,11 +239,9 @@ exports.travel_image_upload = (req, res) => {
     });
 }
 
-//  Retrieve a single travel by their id. GET Request
+//  Retrieves the travel listing's promotion period, discount amount. GET Request
 exports.travel_promotion_get = (req, res) => {
     var id = req.params.id;
-
-    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
 
     travelDB.getPromotionById(id, function (err, result) {
         if (!err) {
@@ -311,7 +302,12 @@ exports.travel_promotion_delete = (req, res) => {
 
     travelDB.deletePromotion(travelid, promotionid, function (err, result) {
         if (!err) {
-            res.status(204).send("No Content");
+            if (result) {
+                res.status(204).send("No Content");
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
         } else {
             res.status(500).send("Internal Server Error");
         }

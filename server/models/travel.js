@@ -60,7 +60,12 @@ var travelDB = {
                 console.log(err);
                 return callback(err, null);
             } else {
-                return callback(null, result);
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result);
+                }
             }
         });
     },

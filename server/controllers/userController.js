@@ -7,6 +7,8 @@ console.log("------------------------------------");
 // ------------------------------------------------------
 const userDB = require('../models/user');
 const utils = require('../utils');
+const config = require('../config');
+const jwt = require('jsonwebtoken');
 
 // ------------------------------------------------------
 // end points
@@ -56,8 +58,6 @@ exports.user_add = (req, res) => {
 exports.user_get = (req, res) => {
     var id = req.params.id;
 
-    if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
-
     userDB.getById(id, function (err, result) {
         if (!err) {
             if (result) {
@@ -82,7 +82,10 @@ exports.user_update = (req, res) => {
         profile_pic_url: req.body.profile_pic_url
     };
 
-    if (!utils.isNumeric(myUser.id)) return res.status(400).send("Bad Request");
+    var userid = req.decodedToken.userid;
+    var role = req.decodedToken.role;
+
+    if (role !== 'admin') return res.status(403).send("Forbidden");
 
     userDB.updateUser(myUser, function (err, result) {
         if (!err) {
@@ -124,6 +127,54 @@ exports.user_add_review = (req, res) => {
             else {
                 res.status(500).send("Internal Server Error");
             }
+        }
+    });
+};
+
+// Login a single user. POST REQUEST
+exports.user_login = (req, res) => {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    userDB.loginUser(username, password, function (err, result) {
+        if (!err) {
+            if (result) {
+                console.log("Private Key: " + config.JWT_SECRET);
+
+                // since there is a matching record, this is the
+                // place to generate the JWT token
+                var token = jwt.sign(
+                    {
+                        // payload
+                        userid: result.userid,
+                        role: result.role
+                    },
+                    config.JWT_SECRET,
+                    {
+                        // expires in 24 hrs = 24 * 60 * 60
+                        expiresIn: 86400//expires in 24 hrs
+                    }
+                );
+
+                var output = {
+                    "token": token,
+                    "UserData": JSON.stringify({
+                        "userid": result.userid,
+                        "username": result.username,
+                        "email": result.email,
+                        "role": result.role,
+                        "pic": result.profile_pic_url
+                    })
+                };
+
+                res.status(200).send(JSON.stringify(output));
+            }
+            else {
+                res.status(404).send("Not Found!");
+            }
+        }
+        else {
+            res.status(500).send("Internal Server Error");
         }
     });
 };

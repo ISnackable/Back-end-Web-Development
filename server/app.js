@@ -14,6 +14,7 @@ const middleware = require('./middlewares');
 const routes = require('./routes');
 const db = require('./models');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 // ------------------------------------------------------
@@ -21,6 +22,8 @@ const app = express();
 // ------------------------------------------------------
 app.use(middleware.urlencodedParser);
 app.use(middleware.jsonParser);
+app.options("*", cors());
+app.use(cors());
 app.use(routes);
 
 // ------------------------------------------------------

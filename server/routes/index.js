@@ -10,7 +10,7 @@ const app = express();
 const users = require('./users');
 const travel = require('./travel');
 const path = require('path');
-const user_controller = require('../controllers/userController')
+const user_controller = require('../controllers/userController');
 
 // ------------------------------------------------------
 // MF config / end points
