@@ -31,13 +31,13 @@
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="/" class="nav-link">Home</a></li>
 					<li class="nav-item"><a href="/about" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="/blog" class="nav-link">Blog</a></li>
 					<li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item cta"><a href="/login" class="nav-link">Login</a></li>
+					<li class="nav-item active cta"><a href="/login" class="nav-link">Login</a></li>
 				</ul>
 			</div>
 		</div>
@@ -45,20 +45,20 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-t-50 p-b-90">
-				<form class="login100-form validate-form flex-sb flex-w" method="POST" onsubmit="return false">
+				<form class="login100-form validate-form flex-sb flex-w" id="login-form">
 					<span class="login100-form-title p-b-51">
 						Login
 					</span>
 
 					
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
-						<input class="input100" type="text" name="username" placeholder="Username">
+						<input class="input100" id="username" type="text" name="username" placeholder="Username">
 						<span class="focus-input100"></span>
 					</div>
 					
 					
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-						<input class="input100" type="password" name="pass" placeholder="Password">
+						<input class="input100" id="password" type="password" name="pass" placeholder="Password">
 						<span class="focus-input100"></span>
 					</div>
 					
@@ -104,6 +104,36 @@
     <script src="js/bootstrap-datepicker.js"></script>
     <script src="js/scrollax.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const baseUrl = "http://localhost:8081";
+        $("#login-form").submit((event) => {
+            // prevent page reload
+            event.preventDefault();
+
+            const username = $("#username").val();
+            const password = $("#password").val();
+            const requestBody = {
+                username: username,
+                password: password
+            };
+
+            axios.post(`${baseUrl}/users/login`, requestBody)
+                .then((response) => {
+                    const token = response.data.token;
+                    const loggedInUserID = response.data.user_id;
+                    localStorage.setItem("token", token);
+                    localStorage.setItem("loggedInUserID", loggedInUserID);
+                    window.location.href = "/";
+                })
+                .catch((error) => {
+					console.log(error);
+					if (error.response.status === 404) {
+						alert("Incorrect Login!");
+					}
+                });
+        });
+    </script>
 
 </body>
 </html>

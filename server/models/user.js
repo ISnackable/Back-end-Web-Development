@@ -20,7 +20,7 @@ var userDB = {
     loginUser: function (username, password, callback) {
         console.log("userDB.loginUser() ...");
 
-        var sql = 'SELECT userid, username, email, role, profile_pic_url FROM user WHERE username=? and password=?';
+        var sql = 'SELECT userid, role FROM user WHERE username=? and password=?';
 
         db.query(sql, [username, password], function (err, result) {
             if (err) {

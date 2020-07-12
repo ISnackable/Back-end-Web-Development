@@ -157,13 +157,7 @@ exports.user_login = (req, res) => {
 
                 var output = {
                     "token": token,
-                    "UserData": JSON.stringify({
-                        "userid": result.userid,
-                        "username": result.username,
-                        "email": result.email,
-                        "role": result.role,
-                        "pic": result.profile_pic_url
-                    })
+                    "user_id": result.userid
                 };
 
                 res.status(200).send(JSON.stringify(output));

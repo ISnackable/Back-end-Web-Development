@@ -13,13 +13,7 @@ app.use(function (req, res, next) {
     console.log('QueryId: ' + req.query.id);
     console.log("\n");
 
-    if (req.method != "GET") {
-        res.type('.html');
-        var msg = "<html><body>This server only serves web pages with GET!</body></html>";
-        res.end(msg);
-    } else {
-        next();
-    }
+    next();
 });
 
 // serve files from the "public" folder, so that they can
@@ -48,7 +42,7 @@ app.get("/login", (req, res) => {
 
 app.use(serveStatic(__dirname + "/public"));
 
-// GET, POST, PUT, DELETE, or any other HTTP request method for any other routes
+// For any other routes
 app.use((req, res) => {
     res.status(404);
     res.contentType('html');
@@ -56,6 +50,5 @@ app.use((req, res) => {
 });
 
 app.listen(port, hostname, function () {
-
     console.log(`Server hosted at http://${hostname}:${port}`);
 });
