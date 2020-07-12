@@ -22,9 +22,7 @@ app.use('/travel', travel);
 
 // GET, POST, PUT, DELETE, or any other HTTP request method for any other routes
 app.all('*', (req, res) => {
-    res.contentType('html');
-    res.sendFile('public/error.html', {root: path.dirname(__dirname)});
-    res.status(404);
+    res.status(404).send("Not found!");
 });
 
 module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount

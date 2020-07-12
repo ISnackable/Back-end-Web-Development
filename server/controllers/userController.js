@@ -107,7 +107,8 @@ exports.user_add_review = (req, res) => {
         rating: req.body.rating,
     };
 
-    if (!utils.isNumeric(userid) || !utils.isNumeric(travelid)) return res.status(400).send("Bad Request");
+    if (!utils.isNumeric(userid) || !utils.isNumeric(travelid) || !utils.isNumeric(review.rating)) return res.status(400).send("Bad Request");
+    if (parseInt(review.rating) < 0 || parseInt(review.rating) > 5) return res.status(400).send("Bad Request");
 
     userDB.createReview(userid, travelid, review, function (err, result) {
         if (!err) {
@@ -118,6 +119,9 @@ exports.user_add_review = (req, res) => {
         } else {
             if (err.code == 'ER_DUP_ENTRY') {
                 res.status(409).send("Conflict. Duplicated entry found!");
+            }
+            else if (err.code == 'ER_NO_REFERENCED_ROW_2') {
+                res.status(404).send("Travel not found!");
             }
             else {
                 res.status(500).send("Internal Server Error");
