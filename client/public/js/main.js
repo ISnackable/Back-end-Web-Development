@@ -297,7 +297,7 @@ AOS.init({
 
 
 	$('.checkin_date, .checkout_date').datepicker({
-		format: "mm-yyyy",
+		format: "MM yyyy",
 		startView: "months", 
 		minViewMode: "months",
 		autoclose: true

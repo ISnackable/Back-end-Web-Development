@@ -16,6 +16,41 @@ const fs = require('fs')
 // end points
 // ------------------------------------------------------
 // Retrieves all travel listings GET REQUEST
+exports.travel_search = (req, res) => {
+    var travelPeriod = new Date(req.body.travelPeriod);
+
+    console.log(travelPeriod);
+
+    // Check if travelPeriod request is valid 
+    if (travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) {
+
+        var travel = {
+            country: req.body.country,
+            travelPeriod: travelPeriod,
+            price: req.body.price
+        };
+
+        console.log(travel)
+
+        travelDB.searchTravel(travel, function (err, result) {
+            if (!err) {
+                if (result) {
+                    res.status(200).send(result);
+                }
+                else {
+                    res.status(404).send("Not Found!");
+                }
+            } else {
+                res.status(500).send("Internal Server Error");
+            }
+        });
+    }
+    else {
+        res.status(400).send("Bad Request");
+    }
+};
+
+// Retrieves all travel listings GET REQUEST
 exports.travel_list = (req, res) => {
     travelDB.getAll(function (err, result) {
         if (!err) {

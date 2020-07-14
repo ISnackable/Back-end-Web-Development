@@ -17,6 +17,43 @@ console.log("------------------------------------");
 var db = require('./index.js');
 
 var travelDB = {
+    searchTravel: function (travel, callback) {
+        console.log("travelDB.searchTravel() ...");
+        
+        var sql = `
+        SELECT 
+            t.title, 
+            t.description, 
+            t.price, 
+            t.country, 
+            DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod", 
+            t.thumbnail
+        FROM
+            travel AS t
+        WHERE
+            t.country LIKE ?
+            AND t.travelPeriod >= ?`;
+
+        values = ['%'+travel.country+'%', travel.travelPeriod];
+        if (travel.price != undefined && travel.price != null && travel.price != "") {
+            sql += 'AND t.price <= ?'
+            values.push(travel.price);
+        }
+
+        db.query(sql, values, function (err, result) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result);
+                }
+            }
+        });
+    },
     getAll: function (callback) {
         console.log("travelDB.getAll() ...");
 
@@ -153,7 +190,7 @@ var travelDB = {
                 t.description, 
                 t.price, 
                 t.country, 
-                DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod", 
+                DATE_FORMAT(t.travelPeriod, "%b %Y") AS "travelPeriod", 
                 t.thumbnail
             FROM
                 travel AS t

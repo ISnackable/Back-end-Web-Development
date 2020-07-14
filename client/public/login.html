@@ -50,7 +50,7 @@
 						Login
 					</span>
 
-					
+					<div id="msg" class="mx-auto mb-4"></div>
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
 						<input class="input100" id="username" type="text" name="username" placeholder="Username">
 						<span class="focus-input100"></span>
@@ -106,14 +106,16 @@
     <script src="js/main.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        const baseUrl = "http://localhost:8081";
+		const baseUrl = "http://localhost:8081";
         $("#login-form").submit((event) => {
             // prevent page reload
             event.preventDefault();
 
             const username = $("#username").val();
-            const password = $("#password").val();
-            const requestBody = {
+			const password = $("#password").val();
+			
+			if (username.length > 0 && password.length > 0) {
+				const requestBody = {
                 username: username,
                 password: password
             };
@@ -127,12 +129,19 @@
                     window.location.href = "/";
                 })
                 .catch((error) => {
-					console.log(error);
 					if (error.response.status === 404) {
-						alert("Incorrect Login!");
+						$('#msg').html('User not found!');
+					}
+					else {
+						console.log(error);
 					}
                 });
-        });
+			}
+			else {
+				$('#msg').html('Fill in username and password!');
+			}
+		});
+		
     </script>
 
 </body>
