@@ -19,18 +19,14 @@ const fs = require('fs')
 exports.travel_search = (req, res) => {
     var travelPeriod = new Date(req.body.travelPeriod);
 
-    console.log(travelPeriod);
-
     // Check if travelPeriod request is valid 
-    if (travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) {
+    if (travelPeriod instanceof Date && !isNaN(travelPeriod)) {
 
         var travel = {
             country: req.body.country,
             travelPeriod: travelPeriod,
             price: req.body.price
         };
-
-        console.log(travel)
 
         travelDB.searchTravel(travel, function (err, result) {
             if (!err) {
@@ -71,7 +67,7 @@ exports.travel_add = (req, res) => {
     var travelPeriod = new Date(req.body.travelPeriod);
 
     // Check if travelPeriod request is valid 
-    if (travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) {
+    if (travelPeriod instanceof Date && !isNaN(travelPeriod)) {
         var travel = {
             title: req.body.title,
             description: req.body.description,
@@ -124,7 +120,7 @@ exports.travel_update = (req, res) => {
     var travelPeriod = new Date(req.body.travelPeriod);
     var id = req.params.id;
 
-    if ((travelPeriod.getMonth() > 0 && travelPeriod.getMonth() <= 12) && utils.isNumeric(id)) {
+    if ((travelPeriod instanceof Date && !isNaN(travelPeriod)) && utils.isNumeric(id)) {
         var travel = {
             id: id,
             title: req.body.title,
@@ -298,7 +294,7 @@ exports.travel_promotion_add = (req, res) => {
     var end_date = new Date(req.body.end_date);
     var travelid = req.params.id;
 
-    if (((start_date.getMonth() > 0 && start_date.getMonth() <= 12) && (end_date.getMonth() > 0 && end_date.getMonth() <= 12)) && (utils.isNumeric(travelid))) {
+    if (((start_date instanceof Date && !isNaN(start_date)) && (end_date instanceof Date && !isNaN(end_date))) && (utils.isNumeric(travelid))) {
         var promotion = {
             travelid: travelid,
             start_date: start_date,

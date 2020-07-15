@@ -41,15 +41,15 @@ app.get('/:id', middleware.idSanitation, travel_controller.travel_get);
 app.put('/:id/thumbnail', middleware.idSanitation, travel_controller.travel_image_upload);
 
 // Retrieves the travel listing's promotion period, discount amount. GET Request
-app.get('/:id/promotion', middleware.idSanitation, travel_controller.travel_promotion_get)
+app.get('/:id/promotion', middleware.idSanitation, travel_controller.travel_promotion_get);
 
 // Add the travel listing's promotion period, discount amount. POST Request
-app.post('/:id/promotion', travel_controller.travel_promotion_add)
+app.post('/:id/promotion', travel_controller.travel_promotion_add);
 
 // Delete the travel listing's promotion period, discount amount. DELETE Request
-app.delete('/:tid/promotion/:pid', travel_controller.travel_promotion_delete)
+app.delete('/:tid/promotion/:pid', travel_controller.travel_promotion_delete);
 
 // Search the travel listing's by country and travel period with either maximum price or no price. GET Request
-app.post('/search', travel_controller.travel_search) // CHANGE TO GET REQUEST !!!
+app.post('/search', travel_controller.travel_search);
 
 module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount
