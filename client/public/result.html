@@ -186,12 +186,12 @@
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    function createCard(title, price, travelPeriod, country) {
+    function createCard(id, title, price, country, travelPeriod, thumbnail) {
       var html = `
       <div class="col-md-6 col-lg-3">
           <div class="project">
             <div class="img">
-              <img src="images/destination-3.jpg" class="img-fluid" alt="${title} Picture">
+              <img src="${(thumbnail != null) ? "http://localhost:8081/" + thumbnail : "images/destination-3.jpg"}" class="img-fluid" alt="${title} Picture">
             </div>
             <div class="text">
               <h4 class="price">$${price}</h4>
@@ -209,8 +209,9 @@
                   <span class="rate"><a href="#">(120)</a></span>
                 </div>
               </div>
+              <a style="color: gray;" href="/travel/${id}">View Itinerary</a>
             </div>
-            <a href="images/destination-3.jpg"
+            <a href="${(thumbnail != null) ? "http://localhost:8081/" + thumbnail : "images/destination-3.jpg"}"
               class="icon image-popup d-flex justify-content-center align-items-center">
               <span class="icon-expand"></span>
             </a>
@@ -232,21 +233,28 @@
 
         axios.post(`${baseUrl}/travel/search`, requestBody)
           .then((response) => {
-            for (var i = 0; i < response.data.length; i++) {
-              var card = createCard(response.data[i].title, response.data[i].price, response.data[i].travelPeriod, response.data[i].country);
+            const travels = response.data;
+            travels.forEach((travel) => {
+              var card = createCard(travel.travelid, travel.title, travel.price, travel.country, travel.travelPeriod, travel.thumbnail);
 
               // append this to the cards containers
               $('#cards').append(card);
-            }
+            });
           })
           .catch((error) => {
             if (error.response.status === 404) {
-              $('#cards').append('<h3 class="mx-auto mt-2" style="display: block;">Travel not found! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
+              // $('#cards').empty(); SEE IF YOU CAN USE THIS
+              $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Travel not found! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
+            }
+            else if (error.response.status === 400) {
+              $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Bad Request! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
             }
             else {
               console.error(error);
             }
           });
+      } else {
+        $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Search at the home page <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
       }
     }
 

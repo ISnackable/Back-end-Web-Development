@@ -17,12 +17,13 @@ console.log("------------------------------------");
 var db = require('./index.js');
 
 var userDB = {
-    loginUser: function (username, password, callback) {
+    loginUser: function (username, callback) {
         console.log("userDB.loginUser() ...");
 
-        var sql = 'SELECT userid, role FROM user WHERE username=? and password=?';
+        // var sql = 'SELECT userid, role FROM user WHERE username=? and password=?';
+        var sql = 'SELECT userid, role, password FROM user WHERE username=?';
 
-        db.query(sql, [username, password], function (err, result) {
+        db.query(sql, [username], function (err, result) {
             if (err) {
                 console.log(err);
                 return callback(err, null);
@@ -32,8 +33,6 @@ var userDB = {
                     return callback(null, null);
                 }
                 else {
-                    // sanity check
-                    console.log("result: " + JSON.stringify(result));
                     return callback(null, result[0]);
                 }
             }

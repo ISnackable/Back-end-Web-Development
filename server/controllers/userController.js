@@ -9,6 +9,7 @@ const userDB = require('../models/user');
 const utils = require('../utils');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 // ------------------------------------------------------
 // end points
@@ -135,9 +136,11 @@ exports.user_login = (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
 
-    userDB.loginUser(username, password, function (err, result) {
+    userDB.loginUser(username, function (err, result) {
         if (!err) {
             if (result) {
+                if (!bcrypt.compareSync(password, result.password)) return res.status(404).send("Not Found!");
+
                 console.log("Private Key: " + config.JWT_SECRET);
 
                 // since there is a matching record, this is the

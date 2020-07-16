@@ -22,6 +22,7 @@ var travelDB = {
         
         var sql = `
         SELECT 
+            t.travelid,
             t.title, 
             t.description, 
             t.price, 

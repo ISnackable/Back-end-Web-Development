@@ -15,6 +15,7 @@ const routes = require('./routes');
 const db = require('./models');
 const express = require('express');
 const cors = require('cors');
+const serveStatic=require('serve-static');
 const app = express();
 
 // ------------------------------------------------------
@@ -24,6 +25,7 @@ app.use(middleware.urlencodedParser);
 app.use(middleware.jsonParser);
 app.options("*", cors());
 app.use(cors());
+app.use(serveStatic(__dirname+"/public/uploads"));  
 app.use(routes);
 
 // ------------------------------------------------------
