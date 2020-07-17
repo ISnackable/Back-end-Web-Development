@@ -28,4 +28,10 @@ app.put('/:id', middleware.verifyToken, middleware.idSanitation, middleware.user
 // Login a single user. POST REQUEST
 app.post('/login', user_controller.user_login);
 
+// Register a single user. POST REQUEST
+// app.post('/register', user_controller.user_register);
+
+// Check if a single user is admin. POST REQUEST
+app.post('/admin', middleware.verifyToken, middleware.authAdmin, (req, res) => {res.status(200).send({})});
+
 module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount

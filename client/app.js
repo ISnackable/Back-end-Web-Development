@@ -44,6 +44,10 @@ app.get("/search", (req, res) => {
     res.sendFile("/public/result.html", { root: __dirname });
 });
 
+app.get("/admin", (req, res) => {
+    res.sendFile("/public/admin.html", { root: __dirname });
+});
+
 app.use(serveStatic(__dirname + "/public"));
 
 // For any other routes

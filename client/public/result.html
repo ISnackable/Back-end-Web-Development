@@ -61,6 +61,10 @@
         </div>
       </div>
       <div id="cards" class="row">
+        <h3 class="mx-auto mt-2 mb-5" style="display: block;">Search at the home page <img
+            class="img-fluid rounded mx-auto d-block" style="display: block;"
+            src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face" /></h3>
+
       </div>
     </div>
   </section>
@@ -184,6 +188,7 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/loginbutton.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     function createCard(id, title, price, country, travelPeriod, thumbnail) {
@@ -234,6 +239,8 @@
         axios.post(`${baseUrl}/travel/search`, requestBody)
           .then((response) => {
             const travels = response.data;
+            $('#cards').empty();
+
             travels.forEach((travel) => {
               var card = createCard(travel.travelid, travel.title, travel.price, travel.country, travel.travelPeriod, travel.thumbnail);
 
@@ -243,18 +250,15 @@
           })
           .catch((error) => {
             if (error.response.status === 404) {
-              // $('#cards').empty(); SEE IF YOU CAN USE THIS
-              $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Travel not found! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
+              $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Travel not found! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h3>');
             }
             else if (error.response.status === 400) {
-              $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Bad Request! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
+              $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Bad Request! <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h3>');
             }
             else {
               console.error(error);
             }
           });
-      } else {
-        $('#cards').html('<h3 class="mx-auto mt-2 mb-5" style="display: block;">Search at the home page <img class="img-fluid rounded mx-auto d-block" style="display: block;" src="https://static.thenounproject.com/png/1101097-200.png" alt="Sad face"/></h1>');
       }
     }
 

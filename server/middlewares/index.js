@@ -113,6 +113,22 @@ const middleware = {
         catch (err) {
             return res.status(500).send("Internal Server Error");
         }
+    },
+    authAdmin: (req, res, next) => {
+        try {
+            var role = req.decodedToken.role;
+            console.log(role)
+            console.log(typeof(role))
+            console.log(role !== 'admin')
+        
+            if (role !== 'admin') {
+                return res.status(403).send("Forbidden");
+            }
+            return next();
+        }
+        catch (err) {
+            return res.status(500).send("Internal Server Error");
+        }
     }
 };
 
