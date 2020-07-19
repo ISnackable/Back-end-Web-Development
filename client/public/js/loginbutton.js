@@ -1,7 +1,7 @@
 const token = localStorage.getItem("token");
-const loggedInUserID = parseInt(localStorage.getItem("loggedInUserID"));
+const username = localStorage.getItem("username");
 
-if (token === null || isNaN(loggedInUserID)) {
+if (token === null || !username) {
     $(".cta").replaceWith(`<li class="nav-item active cta"><a href="/login" class="nav-link">Login</a></li>`)
 }
 else {
@@ -10,6 +10,6 @@ else {
 
 $('#logout').on('click', function () {
     localStorage.removeItem("token");
-    localStorage.removeItem("loggedInUserID");
+    localStorage.removeItem("username");
     $(".cta").replaceWith(`<li class="nav-item active cta"><a href="/login" class="nav-link">Login</a></li>`)
 });

@@ -44,10 +44,31 @@ const middleware = {
         }
     }).single('thumbnail'),
     idSanitation: (req, res, next) => {
+        // Check whether req.params.id is a number
+        console.log("=================================");
+        console.log("idSanitation()");
+        console.log("=================================");
         var id = req.params.id;
 
         if (!utils.isNumeric(id)) return res.status(400).send("Bad Request");
         else next();
+    },
+    bodySanitation: (req, res, next) => {
+        // Check whether req.body is empty.
+        console.log("=================================");
+        console.log("bodySanitation()");
+        console.log("=================================");
+        if ((req.method == "POST" || req.method == "PUT") && Object.keys(req.body).length !== 0) {
+            for (const key in req.body) {
+                const value = req.body[key];
+                console.log(`${key} -> ${value}`);
+                if (!value) return res.status(400).send("Bad Request");
+            }
+        }
+        else if ((req.method == "POST" || req.method == "PUT")) {
+            return res.status(400).send("Bad Request");
+        }
+        return next();
     },
     verifyToken: (req, res, next) => {
         console.log("=================================");
@@ -117,11 +138,9 @@ const middleware = {
     authAdmin: (req, res, next) => {
         try {
             var role = req.decodedToken.role;
-            console.log(role)
-            console.log(typeof(role))
-            console.log(role !== 'admin')
         
             if (role !== 'admin') {
+                console.log("Not Admin!")
                 return res.status(403).send("Forbidden");
             }
             return next();

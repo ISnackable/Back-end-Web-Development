@@ -26,7 +26,7 @@ app.get('/:id', middleware.idSanitation, user_controller.user_get);
 app.put('/:id', middleware.verifyToken, middleware.idSanitation, middleware.userAuthorization, user_controller.user_update);
 
 // Login a single user. POST REQUEST
-app.post('/login', user_controller.user_login);
+app.post('/login', middleware.bodySanitation, user_controller.user_login);
 
 // Register a single user. POST REQUEST
 // app.post('/register', user_controller.user_register);

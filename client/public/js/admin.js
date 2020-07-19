@@ -1,16 +1,11 @@
-const token = localStorage.getItem("token");
-const loggedInUserID = parseInt(localStorage.getItem("loggedInUserID"));
-
-if (token === null || isNaN(loggedInUserID)) {
+if (localStorage.getItem("token") === null || !localStorage.getItem("username")) {
     window.location = "/"
 }
 else {
     $.ajax({
-        headers: { 'authorization': 'Bearer ' + token },
+        headers: { 'authorization': 'Bearer ' + localStorage.getItem("token")},
         url: 'http://localhost:8081/users/admin',
         type: 'POST',
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json',
         success: function (data, textStatus, xhr) {
             // Do nothing
         },
@@ -19,3 +14,5 @@ else {
         }
     });
 }  
+
+$(".username").prepend(localStorage.getItem("username"));

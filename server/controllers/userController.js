@@ -160,7 +160,7 @@ exports.user_login = (req, res) => {
 
                 var output = {
                     "token": token,
-                    "user_id": result.userid
+                    "username": username
                 };
 
                 res.status(200).send(JSON.stringify(output));
