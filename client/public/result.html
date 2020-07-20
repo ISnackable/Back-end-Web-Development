@@ -5,7 +5,7 @@
   <title>SP Travel - Result</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
 
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 
@@ -202,7 +202,7 @@
             <div class="text">
               <h4 class="price">$${price}</h4>
               <span>Depart date: ${travelPeriod}</span>
-              <h3><a href="project.html">${title}, ${country}</a></h3>
+              <h3><a href="/travel/${id}">${title}, ${country}</a></h3>
               <div class="star d-flex clearfix">
                 <div class="mr-auto float-left">
                   <span class="ion-ios-star"></span>
@@ -212,17 +212,41 @@
                   <span class="ion-ios-star"></span>
                 </div>
                 <div class="float-right">
-                  <span class="rate"><a href="#">(120)</a></span>
+                  <span class="rate"><a href="/#">(120)</a></span>
                 </div>
               </div>
-              <a style="color: gray;" href="/travel/${id}">View Itinerary</a>
+              <a style="color: gray;" href="/travel/${id}/itinerary" data-toggle="modal" data-target="#travel-${id}-itinerary">View Itinerary</a>
             </div>
             <a href="${(thumbnail != null) ? "http://localhost:8081/" + thumbnail : "images/destination-3.jpg"}"
               class="icon image-popup d-flex justify-content-center align-items-center">
               <span class="icon-expand"></span>
             </a>
           </div>
-        </div>`
+          <div class="modal fade" id="travel-${id}-itinerary" tabindex="-1" role="dialog" aria-labelledby="${title}-itinerary" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">${title}'s itinerary</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="travel-${id}-itinerary-body">
+                  <ul class="nav nav-pills mb-3" id="travel-${id}-itinerary-pills-tab" role="tablist">
+                    <!-- itinerary day's in here -->
+                  </ul>
+                  <div class="tab-content pt-2 pl-1" id="travel-${id}-itinerary-pills-tabContent">
+                    <!-- itinerary content's in here -->
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        `
 
       return html;
     }
@@ -247,6 +271,7 @@
 
               // append this to the cards containers
               $('#cards').append(card);
+              getItinerary(travel.travelid);
             });
           })
           .catch((error) => {
@@ -263,13 +288,46 @@
       }
     }
 
+    function getItinerary(id) {
+      const baseUrl = "http://localhost:8081";
+
+      axios.get(`${baseUrl}/travel/${id}/itinerary`)
+        .then((response) => {
+          const itinerarys = response.data;
+
+          itinerarys.forEach((itinerary) => {
+            $(`#travel-${id}-itinerary-pills-tab`).append(
+              `<li class="nav-item active" id="pills-${id}">
+                <a class="nav-link" id="pills-${id}-${itinerary.day}-tab" data-toggle="pill" href="#pills-${id}-${itinerary.day}" role="tab"
+                  aria-controls="pills-${id}-${itinerary.day}" aria-selected="false">Day ${itinerary.day}</a>
+              </li>`)
+            $(`#travel-${id}-itinerary-pills-tabContent`).append(
+              `<div class="tab-pane fade" id="pills-${id}-${itinerary.day}" role="tabpanel" aria-labelledby="pills-${id}-${itinerary.day}-tab">Description: ${itinerary.activity} </div>`)
+            });
+            
+            $(`#pills-${id}-1, #pills-${id}-1-tab`).addClass("active show");
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            // console.log("Not Found!")
+            $(`#travel-${id}-itinerary-body`).html("No itinerarys yet");
+          }
+          else {
+            console.error(error);
+          }
+        })
+    }
+
     $(document).ready(function () {
       var params = new URLSearchParams(window.location.search);
-      const country = params.get("country");
-      const max_cost = params.get("cost");
-      const preferred_month = params.get("month");
 
-      searchTravel(country, max_cost, preferred_month);
+      if (params.has('country') && params.has('month')) {
+        const country = params.get("country");
+        const max_cost = params.get("cost");
+        const preferred_month = params.get("month");
+
+        searchTravel(country, max_cost, preferred_month);
+      }
     });
 
   </script>
