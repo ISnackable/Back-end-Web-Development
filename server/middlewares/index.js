@@ -65,7 +65,7 @@ const middleware = {
                 if (!value) return res.status(400).send("Bad Request");
             }
         }
-        else if ((req.method == "POST" || req.method == "PUT")) {
+        else if (req.method == "POST" || req.method == "PUT") {
             return res.status(400).send("Bad Request");
         }
         return next();

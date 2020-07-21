@@ -6,10 +6,10 @@ else {
         headers: { 'authorization': 'Bearer ' + localStorage.getItem("token")},
         url: 'http://localhost:8081/users/admin',
         type: 'POST',
-        success: function (data, textStatus, xhr) {
+        success: function () {
             // Do nothing
         },
-        error: function (xhr, textStatus, errorThrown) {
+        error: function () {
             window.location = "/"
         }
     });

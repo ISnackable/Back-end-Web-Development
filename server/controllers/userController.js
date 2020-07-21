@@ -139,7 +139,7 @@ exports.user_login = (req, res) => {
     userDB.loginUser(username, function (err, result) {
         if (!err) {
             if (result) {
-                if (!bcrypt.compareSync(password, result.password)) return res.status(404).send("Not Found!");
+                if (!bcrypt.compareSync(password, result.password)) return res.status(401).send("Login has failed.");
 
                 console.log("Private Key: " + config.JWT_SECRET);
 
@@ -166,7 +166,7 @@ exports.user_login = (req, res) => {
                 res.status(200).send(JSON.stringify(output));
             }
             else {
-                res.status(404).send("Not Found!");
+                res.status(401).send("Login has failed.");
             }
         }
         else {

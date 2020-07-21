@@ -88,11 +88,13 @@
                         <!-- ============================================================== -->
                         <!-- Profile -->
                         <!-- ============================================================== -->
-                        <li class="nav-item dropdown u-pro cta">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="/login"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                        <li class="nav-item dropdown u-pro">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
                                     src="../assets/images/users/1.jpg" alt="user" class="" /> <span
                                     class="hidden-md-down username">&nbsp;</span> </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a id="logout" class="dropdown-item">Logout</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -123,10 +125,7 @@
                                     class="fa fa-plane"></i><span class="hide-menu">Manage Tour Itinerary</span></a>
                         </li>
                     </ul>
-                    <div class="text-center m-t-30">
-                        <a href="https://wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down"> Upgrade to Pro</a>
-                    </div>
+
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -459,6 +458,7 @@
     <script src="../assets/node_modules/c3-master/c3.min.js"></script>
     <!-- Chart JS -->
     <script src="js/dashboard1.js"></script>
+    <script src="js/loginbutton.js"></script>
 </body>
 
 </html>

@@ -11,5 +11,5 @@ else {
 $('#logout').on('click', function () {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    $(".cta").replaceWith(`<li class="nav-item active cta"><a href="/login" class="nav-link">Login</a></li>`)
+    location.reload();
 });
