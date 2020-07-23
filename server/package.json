@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Back End Express Client",
+  "description": "Back End Express Server",
   "main": "app.js",
   "directories": {
     "doc": "docs"

@@ -111,10 +111,10 @@
                         <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="manage-travel.html" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="/manage-travel" aria-expanded="false"><i
                                     class="fa fa-globe"></i><span class="hide-menu">Manage Tour Package</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="manage-itinerary.html" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="/manage-itinerary" aria-expanded="false"><i
                                     class="fa fa-plane"></i><span class="hide-menu">Manage Tour Itinerary</span></a>
                         </li>
 
@@ -157,7 +157,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form-horizontal form-material">
+                                <form class="form-horizontal form-material" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label class="col-md-12">Tour Title</label>
                                         <div class="col-md-12">
@@ -456,16 +456,17 @@
                                         <label class="col-md-12">Image</label>
                                         <div class="col-md-12">
                                             <div class="my-3">
-                                                <img id="img-holder" height="250px" width="250px"/>
+                                                <img id="img-holder" height="250px" width="250px" />
                                             </div>
                                             <div class="btn btn-secondary" id="default_img">Default</div>
                                             <label class="btn btn-secondary" for="img">Upload</label>
-                                            <input type="file" id="img" name="img" accept=".jpeg, .jpg" style="display: none;">
+                                            <input type="file" id="img" name="img" accept=".jpeg, .jpg"
+                                                style="display: none;">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <button class="btn btn-success">Submit</button>
+                                            <button class="btn btn-success" id="add-travel-button">Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -475,85 +476,6 @@
                 </div>
                 <!-- ============================================================== -->
                 <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Right sidebar -->
-                <!-- ============================================================== -->
-                <!-- .right-sidebar -->
-                <div class="right-sidebar">
-                    <div class="slimscrollright">
-                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span>
-                        </div>
-                        <div class="r-panel-body">
-                            <ul id="themecolors" class="m-t-20">
-                                <li><b>With Light sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-theme="default" class="default-theme">1</a></li>
-                                <li><a href="javascript:void(0)" data-theme="green" class="green-theme">2</a></li>
-                                <li><a href="javascript:void(0)" data-theme="red" class="red-theme">3</a></li>
-                                <li><a href="javascript:void(0)" data-theme="blue" class="blue-theme">4</a></li>
-                                <li><a href="javascript:void(0)" data-theme="purple" class="purple-theme">5</a></li>
-                                <li><a href="javascript:void(0)" data-theme="megna" class="megna-theme">6</a></li>
-                                <li class="d-block m-t-30"><b>With Dark sidebar</b></li>
-                                <li><a href="javascript:void(0)" data-theme="default-dark"
-                                        class="default-dark-theme working">7</a></li>
-                                <li><a href="javascript:void(0)" data-theme="green-dark" class="green-dark-theme">8</a>
-                                </li>
-                                <li><a href="javascript:void(0)" data-theme="red-dark" class="red-dark-theme">9</a></li>
-                                <li><a href="javascript:void(0)" data-theme="blue-dark" class="blue-dark-theme">10</a>
-                                </li>
-                                <li><a href="javascript:void(0)" data-theme="purple-dark"
-                                        class="purple-dark-theme">11</a></li>
-                                <li><a href="javascript:void(0)" data-theme="megna-dark"
-                                        class="megna-dark-theme ">12</a></li>
-                            </ul>
-                            <ul class="m-t-20 chatonline">
-                                <li><b>Chat option</b></li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/1.jpg" alt="user-img"
-                                            class="img-circle"> <span>Varun Dhavan <small
-                                                class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/2.jpg" alt="user-img"
-                                            class="img-circle"> <span>Genelia Deshmukh <small
-                                                class="text-warning">Away</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/3.jpg" alt="user-img"
-                                            class="img-circle"> <span>Ritesh Deshmukh <small
-                                                class="text-danger">Busy</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/4.jpg" alt="user-img"
-                                            class="img-circle"> <span>Arijit Sinh <small
-                                                class="text-muted">Offline</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/5.jpg" alt="user-img"
-                                            class="img-circle"> <span>Govinda Star <small
-                                                class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/6.jpg" alt="user-img"
-                                            class="img-circle"> <span>John Abraham<small
-                                                class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/7.jpg" alt="user-img"
-                                            class="img-circle"> <span>Hritik Roshan<small
-                                                class="text-success">online</small></span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"><img src="../assets/images/users/8.jpg" alt="user-img"
-                                            class="img-circle"> <span>Pwandeep rajan <small
-                                                class="text-success">online</small></span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Right sidebar -->
                 <!-- ============================================================== -->
             </div>
             <!-- ============================================================== -->
@@ -595,41 +517,79 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/loginbutton.js"></script>
     <script>
-        $("#img").on('change', function () {
+        $(document).ready(function () {
+            let myFile;
+            const baseUrl = "http://localhost:8081";
 
-            //Get count of selected files
-            var countFiles = $(this)[0].files.length;
+            $("#img").on('change', function () {
 
-            var imgPath = $(this)[0].value;
-            var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-            var image_holder = $("#img-holder");
-            image_holder.empty();
+                //Get count of selected files
+                var countFiles = $(this)[0].files.length;
 
-            if (extn == "jpg" || extn == "jpeg") {
-                if (typeof (FileReader) != "undefined") {
+                var imgPath = $(this)[0].value;
+                var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+                var image_holder = $("#img-holder");
+                image_holder.empty();
 
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        image_holder.attr('src', e.target.result);
+                if (extn == "jpg" || extn == "jpeg") {
+                    if (typeof (FileReader) != "undefined") {
+
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            image_holder.attr('src', e.target.result);
+                        }
+
+                        image_holder.show();
+                        reader.readAsDataURL($(this)[0].files[0]);
+                        myFile = $(this)[0].files[0];
+
+                    } else {
+                        myFile = $('#img').prop('files')[0]
+                        image_holder.attr('src', URL.createObjectURL(myFile));
                     }
-
-                    image_holder.show();
-                    reader.readAsDataURL($(this)[0].files[0]);
-
                 } else {
-                    alert("This browser does not support FileReader.");
+                    alert("Pls select only images");
                 }
-            } else {
-                alert("Pls select only images");
-            }
-        });
+            });
 
-        $("#default_img").click(function() {
-            var image_holder = $("#img-holder");
-            image_holder.empty();
-            image_holder.attr('src', '/images/destination-1.jpg');
-            image_holder.show();
-        })
+            $("#default_img").click(function () {
+                var image_holder = $("#img-holder");
+                image_holder.empty();
+                image_holder.attr('src', '/images/destination-3.jpg');
+                image_holder.show();
+
+                myFile = ""
+            })
+
+            $('#add-travel-button').click(function(e) {
+                e.preventDefault();
+                
+                console.log(myFile);
+                const formData = new FormData();
+                formData.append('thumbnail', myFile);
+
+
+                // axios.put(`${baseUrl}/travel/<TOBECHANGE>/thumbnail`,
+                //     formData,
+                //     {
+                //         headers: {
+                //             'Authorization': `Bearer ${localStorage.getItem("token")}`
+                //         }
+                //     })
+                //     .then((response) => {
+                //         console.log(response)
+                //     })
+                //     .catch((error) => {
+                //         if (error.response.status === 404) {
+                //             // console.log("Not Found!")
+                //             $(``).html("No travels yet");
+                //         }
+                //         else {
+                //             console.error(error.response);
+                //         }
+                //     })
+            });
+        });
     </script>
 </body>
 

@@ -197,7 +197,7 @@
       <div class="col-md-6 col-lg-3">
           <div class="project">
             <div class="img">
-              <img src="${(thumbnail != null) ? "http://localhost:8081/" + thumbnail : "images/destination-3.jpg"}" class="img-fluid" alt="${title} Picture">
+              <img src="${(thumbnail != null && thumbnail != "") ? "http://localhost:8081/" + thumbnail : "images/destination-3.jpg"}" class="img-fluid" alt="${title} Picture">
             </div>
             <div class="text">
               <h4 class="price">$${price}</h4>
@@ -217,16 +217,12 @@
               </div>
               <a style="color: gray;" href="/travel/${id}/itinerary" data-toggle="modal" data-target="#travel-${id}-itinerary">View Itinerary</a>
             </div>
-            <a href="${(thumbnail != null) ? "http://localhost:8081/" + thumbnail : "images/destination-3.jpg"}"
-              class="icon image-popup d-flex justify-content-center align-items-center">
-              <span class="icon-expand"></span>
-            </a>
           </div>
-          <div class="modal fade" id="travel-${id}-itinerary" tabindex="-1" role="dialog" aria-labelledby="${title}-itinerary" aria-hidden="true">
+          <div class="modal fade" id="travel-${id}-itinerary" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">${title}'s itinerary</h5>
+                  <h5 class="modal-title">${title}'s itinerary</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>

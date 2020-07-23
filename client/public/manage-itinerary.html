@@ -22,7 +22,7 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <![endif]-->
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
@@ -80,9 +80,10 @@
                         <!-- Profile -->
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown u-pro">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                    src="../assets/images/users/1.jpg" alt="user" class="" /> <span
-                                    class="hidden-md-down username"> &nbsp;</span> </a>
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic"
+                                id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"><img src="../assets/images/users/1.jpg" alt="user" class="" />
+                                <span class="hidden-md-down username"> &nbsp;</span> </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" id="logout">Logout</a>
                             </div>
@@ -109,10 +110,10 @@
                         <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="manage-travel.html" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="/manage-travel" aria-expanded="false"><i
                                     class="fa fa-globe"></i><span class="hide-menu">Manage Tour Package</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="manage-itinerary.html" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="/manage-itinerary" aria-expanded="false"><i
                                     class="fa fa-plane"></i><span class="hide-menu">Manage Tour Itinerary</span></a>
                         </li>
 
@@ -162,6 +163,7 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>Tour Title</th>
                                                 <th>Country</th>
                                                 <th>Tour Cost</th>
@@ -170,14 +172,8 @@
                                                 <th>Add</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="table-body">
                                             <tr>
-                                                <td>6D5N Hong Kong Island Tour</td>
-                                                <td>Hong Kong</td>
-                                                <td>3000</td>
-                                                <td>2020-12</td>
-                                                <td>6</td>
-                                                <td><button class="btn btn-sm">Add</button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -231,6 +227,142 @@
     <script src="../assets/node_modules/peity/jquery.peity.init.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/loginbutton.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function createCard(index, id, title, price, country, travelPeriod) {
+            var date = new Date(travelPeriod);
+            var month = date.getUTCMonth() + 1; // Since getUTCMonth() returns month from 0-11 not 1-12
+            var year = date.getUTCFullYear();
+
+            const template =
+                `
+            <tr>
+                <td>${id}</td>
+                <td>${title}</td>
+                <td>${country}</td>
+                <td>$${price}</td>
+                <td>${year + '-' + month}</td>
+                <td>1</td>
+                <td><button class="btn btn-sm" data-toggle="modal" data-target="#travel-${id}">Add</button></td>
+                <td>
+                    <div class="modal fade" id="travel-${id}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Tour Itinerary</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="travel-${id}-message">
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="travel-${id}-itinerary-day">Day:</label>
+                                    <div>
+                                        <input class="form-control" type="number" value="1" id="travel-${id}-itinerary-day" min="1" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="travel-${id}-itinerary-description">Description:</label>
+                                    <textarea class="form-control" rows="5" id="travel-${id}-itinerary-description" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right add-button" data-index=${index}>Add</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+            `
+
+            return template;
+        }
+
+
+        $(document).ready(function () {
+            let travels;
+            const baseUrl = "http://localhost:8081";
+
+            axios.get(`${baseUrl}/travel/`)
+                .then((response) => {
+                    travels = response.data;
+                    $("#table-body").empty();
+
+                    travels.forEach((travel, index) => {
+                        var card = createCard(index, travel.travelid, travel.title, travel.price, travel.country, travel.travelPeriod);
+
+                        $("#table-body").append(card);
+                    });
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        // console.log("Not Found!")
+                        $(``).html("No travels yet");
+                    }
+                    else {
+                        console.error(error);
+                    }
+                })
+
+            $(document).on("click", ".add-button", function (event) {
+                event.preventDefault()
+
+                const index = parseInt($(this).attr("data-index"));
+                const travel = travels[index];
+
+                var itinerary_day = $(`#travel-${travel.travelid}-itinerary-day`).val();
+                var itinerary_description = $(`#travel-${travel.travelid}-itinerary-description`).val();
+
+                if (itinerary_day !== "" && itinerary_description !== "") {
+                    const requestBody = {
+                        day: itinerary_day,
+                        activity: itinerary_description
+                    };
+
+                    console.log(requestBody)
+
+                    axios.post(`${baseUrl}/travel/${travel.travelid}/itinerary`,
+                        requestBody,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem("token")}`
+                            }
+                        })
+                        .then((res) => {
+                            $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-success text-center" role="alert" id="travel-${travel.travelid}-message">Successfully added itinerary</div>`);
+                        })
+                        .catch((error) => {
+                            if (error.response.status === 404) {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Opps, travel not found!</div>`);
+                            }
+                            else if (error.response.status === 409) {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Itinerary has already been added!</div>`);
+                            }
+                            else {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-danger text-center" role="alert" id="travel-${travel.travelid}-message">Opps, something went wrong</div>`);
+                                console.error(error);
+                            }
+                        })
+                        .finally(() => {
+                            $(`#travel-${travel.travelid}-message`).fadeOut(2400);
+                            setTimeout(function () {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div id="travel-${travel.travelid}-message"></div>`);
+                            }, 2500)
+                        })
+                } else {
+                    $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Fill in the required box.</div>`);
+                    $(`#travel-${travel.travelid}-message`).fadeOut(2400);
+                    setTimeout(function () {
+                        $(`#travel-${travel.travelid}-message`).replaceWith(`<div id="travel-${travel.travelid}-message"></div>`);
+                    }, 2500)
+                }
+
+            });
+        });
+    </script>
 </body>
 
 </html>

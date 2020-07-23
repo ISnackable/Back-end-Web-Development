@@ -64,6 +64,8 @@ exports.travel_list = (req, res) => {
 
 // Used to add a new travel listing listing to the database. POST REQUEST
 exports.travel_add = (req, res) => {
+    // Add upload image endpoint here.MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??
+
     var travelPeriod = new Date(req.body.travelPeriod);
 
     // Check if travelPeriod request is valid 
@@ -187,7 +189,10 @@ exports.travel_itineraries_add = (req, res) => {
 
             res.status(201).send(output);
         } else {
-            if (err.code == 'ER_DUP_ENTRY') {
+            if (err.code == 'ER_NO_REFERENCED_ROW_2') {
+                res.status(404).send("Not Found!");
+            }
+            else if (err.code == 'ER_DUP_ENTRY') {
                 res.status(409).send("Conflict. Duplicated entry found!");
             }
             else {

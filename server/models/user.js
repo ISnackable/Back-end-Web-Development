@@ -75,7 +75,7 @@ var userDB = {
     getById: function (id, callback) {
         console.log("userDB.getById() ...");
 
-        var sql = 'SELECT * FROM user WHERE userid = ?';
+        var sql = 'SELECT userid, username, email, profile_pic_url, created_at FROM user WHERE userid = ?';
 
         db.query(sql, [id], function (err, result) {
             if (err) {
@@ -94,7 +94,7 @@ var userDB = {
     updateUser: function (user, callback) {
         console.log("userDB.updateUser() ...");
 
-        var sql = 'SELECT * FROM user WHERE username LIKE ? AND NOT userid = ?';
+        var sql = 'SELECT userid, username, email, profile_pic_url, created_at FROM user WHERE username LIKE ? AND NOT userid = ?';
 
         db.query(sql, [user.username, user.id], function (err, result) {
             if (err) {

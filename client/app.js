@@ -48,13 +48,21 @@ app.get("/admin", (req, res) => {
     res.sendFile("/public/admin.html", { root: __dirname });
 });
 
+app.get("/manage-travel", (req, res) => {
+    res.sendFile("/public/manage-travel.html", { root: __dirname });
+});
+
+app.get("/manage-itinerary", (req, res) => {
+    res.sendFile("/public/manage-itinerary.html", { root: __dirname });
+});
+
 app.use(serveStatic(__dirname + "/public"));
 
 // For any other routes
 app.use((req, res) => {
     res.status(404);
     res.contentType('html');
-    res.sendFile(__dirname + '/public/error.html');
+    res.sendFile('/public/error.html', { root: __dirname });
 });
 
 app.listen(port, hostname, function () {
