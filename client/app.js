@@ -28,7 +28,7 @@ app.get("/about", (req, res) => {
     res.sendFile("/public/about.html", { root: __dirname });
 });
 
-app.get("/blog", (req, res) => {
+app.get("/reviews", (req, res) => {
     res.sendFile("/public/blog.html", { root: __dirname });
 });
 
@@ -42,6 +42,10 @@ app.get("/login", (req, res) => {
 
 app.get("/search", (req, res) => {
     res.sendFile("/public/result.html", { root: __dirname });
+});
+
+app.get("/review-single", (req, res) => {
+    res.sendFile("/public/review-single.html", { root: __dirname });
 });
 
 app.get("/admin", (req, res) => {

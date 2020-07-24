@@ -25,7 +25,7 @@ var userDB = {
 
         db.query(sql, [username], function (err, result) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return callback(err, null);
 
             } else {
@@ -46,7 +46,7 @@ var userDB = {
 
         db.query(sql, [], function (err, result) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return callback(err, null);
             } else {
                 if (result.length == 0) {
@@ -65,7 +65,7 @@ var userDB = {
 
         db.query(sql, [user.username, user.email, user.profile_pic_url], function (err, result) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return callback(err, null);
             } else {
                 return callback(null, result.insertId);
@@ -79,7 +79,7 @@ var userDB = {
 
         db.query(sql, [id], function (err, result) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return callback(err, null);
             } else {
                 if (result.length == 0) {
@@ -98,7 +98,7 @@ var userDB = {
 
         db.query(sql, [user.username, user.id], function (err, result) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return callback(err, null);
             } else {
                 if (result.length > 0) {
@@ -110,7 +110,7 @@ var userDB = {
 
                     db.query(sql, [user.username, user.email, user.profile_pic_url, user.id], function (err, result) {
                         if (err) {
-                            console.log(err);
+                            console.error(err);
                             return callback(err, null);
                         } else if (result.affectedRows == 1) {
                             console.log("Updated successfully.")
@@ -133,7 +133,7 @@ var userDB = {
 
         db.query(sql, [userid, travelid, review.content, review.rating], function (err, result) {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return callback(err, null);
             } else {
                 return callback(null, result.insertId);

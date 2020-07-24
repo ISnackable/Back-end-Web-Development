@@ -242,7 +242,7 @@
                 <td>${country}</td>
                 <td>$${price}</td>
                 <td>${year + '-' + month}</td>
-                <td>1</td>
+                <td id="itinerary-travel-${id}"></td>
                 <td><button class="btn btn-sm" data-toggle="modal" data-target="#travel-${id}">Add</button></td>
                 <td>
                     <div class="modal fade" id="travel-${id}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -281,6 +281,21 @@
             return template;
         }
 
+        function getItinerary(id) {
+            axios.get(`http://localhost:8081/travel/${id}/itinerary`)
+                .then((reponse) => {
+                    number_of_day = reponse.data.length;
+                    $(`#itinerary-travel-${id}`).html(number_of_day);
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        $(`#itinerary-travel-${id}`).html(0);
+                    }
+                    else {
+                        console.error(error)
+                    }
+                })
+        }
 
         $(document).ready(function () {
             let travels;
@@ -293,19 +308,19 @@
 
                     travels.forEach((travel, index) => {
                         var card = createCard(index, travel.travelid, travel.title, travel.price, travel.country, travel.travelPeriod);
-
                         $("#table-body").append(card);
+                        getItinerary(travel.travelid);
                     });
                 })
                 .catch((error) => {
                     if (error.response.status === 404) {
                         // console.log("Not Found!")
-                        $(``).html("No travels yet");
+                        $(`#table-body`).html("No travels yet");
                     }
                     else {
                         console.error(error);
                     }
-                })
+                });
 
             $(document).on("click", ".add-button", function (event) {
                 event.preventDefault()
@@ -321,8 +336,6 @@
                         day: itinerary_day,
                         activity: itinerary_description
                     };
-
-                    console.log(requestBody)
 
                     axios.post(`${baseUrl}/travel/${travel.travelid}/itinerary`,
                         requestBody,
@@ -351,6 +364,7 @@
                             setTimeout(function () {
                                 $(`#travel-${travel.travelid}-message`).replaceWith(`<div id="travel-${travel.travelid}-message"></div>`);
                             }, 2500)
+                            getItinerary(travel.travelid);
                         })
                 } else {
                     $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Fill in the required box.</div>`);
@@ -359,7 +373,6 @@
                         $(`#travel-${travel.travelid}-message`).replaceWith(`<div id="travel-${travel.travelid}-message"></div>`);
                     }, 2500)
                 }
-
             });
         });
     </script>

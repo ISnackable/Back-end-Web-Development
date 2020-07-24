@@ -49,7 +49,7 @@ app.post('/:id/promotion', middleware.verifyToken, middleware.authAdmin, travel_
 // Delete the travel listing's promotion period, discount amount. DELETE Request
 app.delete('/:tid/promotion/:pid', middleware.verifyToken, middleware.authAdmin, travel_controller.travel_promotion_delete);
 
-// Search the travel listing's by country and travel period with either maximum price or no price. GET Request
+// Search the travel listing's by country and travel period with either maximum price or no price. POST Request
 app.post('/search', travel_controller.travel_search);
 
 module.exports = app; // https://expressjs.com/en/4x/api.html#app.mountpath Explains sub-app mount

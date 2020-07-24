@@ -28,6 +28,9 @@ app.put('/:id', middleware.verifyToken, middleware.idSanitation, middleware.user
 // Login a single user. POST REQUEST
 app.post('/login', middleware.bodySanitation, user_controller.user_login);
 
+// Used to add a new review to the database for a given user and travel listing. POST Request
+app.post('/:uid/travel/:tid/review/', middleware.verifyToken, middleware.userAuthorization, middleware.bodySanitation, user_controller.user_add_review);
+
 // Check if a single user is admin. POST REQUEST
 app.post('/admin', middleware.verifyToken, middleware.authAdmin, (req, res) => {res.status(200).send({})});
 

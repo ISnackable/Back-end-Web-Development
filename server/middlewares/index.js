@@ -120,7 +120,7 @@ const middleware = {
     },
     userAuthorization: (req, res, next) => {
         try {
-            var id = parseInt(req.params.id);
+            var id = req.params.id ? parseInt(req.params.id) : parseInt(req.params.uid);
             var userid = parseInt(req.decodedToken.userid);
             var role = req.decodedToken.role;
         
