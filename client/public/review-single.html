@@ -72,7 +72,7 @@
   <section class="ftco-section">
     <div class="container">
       <div class="row">
-        <div class="col-lg-8 order-md-last ftco-animate">
+        <div id="travel-content" class="col-lg-8 order-md-last ftco-animate">
           <h2 class="mb-3">It is a long established fact a reader be distracted</h2>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis, eius mollitia suscipit, quisquam
             doloremque distinctio perferendis et doloribus unde architecto optio laboriosam porro adipisci sapiente
@@ -94,40 +94,40 @@
 
             <div class="comment-form-wrap pt-5">
               <h3 class="mb-5">Post a review</h3>
-              <form class="p-5 bg-light">
+              <form id="review-form" class="p-5 bg-light">
                 <div class="form-group">
                   <div>
                     <label for="rating">Rating *</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                    <input class="form-check-input" type="radio" name="ratingRadioOptions" id="inlineRadio1" value="1">
                     <label class="form-check-label" for="inlineRadio1">1</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                    <input class="form-check-input" type="radio" name="ratingRadioOptions" id="inlineRadio2" value="2">
                     <label class="form-check-label" for="inlineRadio2">2</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
+                    <input class="form-check-input" type="radio" name="ratingRadioOptions" id="inlineRadio3" value="3">
                     <label class="form-check-label" for="inlineRadio3">3</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="4">
+                    <input class="form-check-input" type="radio" name="ratingRadioOptions" id="inlineRadio4" value="4">
                     <label class="form-check-label" for="inlineRadio4">4</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="5">
+                    <input class="form-check-input" type="radio" name="ratingRadioOptions" id="inlineRadio5" value="5">
                     <label class="form-check-label" for="inlineRadio5">5</label>
                   </div>
                 </div>
-                
-                
+
+
                 <div class="form-group">
                   <label for="message">Message *</label>
-                  <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+                  <textarea name="" id="message-review" cols="30" rows="10" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
-                  <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+                  <input id="submit-review" type="submit" value="Post Review" class="btn py-3 px-4 btn-primary">
                 </div>
 
               </form>
@@ -341,6 +341,7 @@
   <script src="js/main.js"></script>
   <script src="js/loginbutton.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/javascript" src="js/purify.min.js"></script>
   <script>
     function createReviewTemplate(username, created_at, content, rating) {
       var date = new Date(created_at);
@@ -378,38 +379,90 @@
 
             $('.comment-list').append(comment);
           })
-          $('#review-count').html(`${reviews.length} Reviews`)
+          $('#review-count').text(`${reviews.length} Reviews`)
         })
         .catch((error) => {
           if (error.response.status === 404) {
-            $('.comment-list').html('<p>No review yet, be the first one to post!</p>');
+            $('.comment-list').text('No review yet, be the first one to post!');
           }
           console.error(error);
         });
     }
 
-    function getTravels() {
+    function getTravels(tid) {
       const baseUrl = "http://localhost:8081";
 
-      axios.get(`${baseUrl}/travel`)
+      axios.get(`${baseUrl}/travel/${tid}`)
         .then((response) => {
-          const travels = response.data;
-
-          travels.forEach((travel) => {
-            var card = createCard(travel.travelid, travel.title, travel.description, travel.country, travel.travelPeriod);
-          });
+          // nothing for now
         })
         .catch((error) => {
-          console.error(error);
+          if (error.response.status === 404) {
+            $('#travel-content').html(`<div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading"> Travel not found!</h4>
+            <p>Make sure you selected the correct travelid.</p>
+            <hr>
+            <a href="/" class="mb-0">Return to the homepage.</a>
+            </div>`)
+          }
         });
     }
+
+    function postReview(tid, content, rating) {
+      const baseUrl = "http://localhost:8081";
+
+      var cleanHtml = DOMPurify.sanitize(content, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
+
+      if (cleanHtml !== "" && localStorage.getItem("token") !== null && localStorage.getItem("userid") !== null && localStorage.getItem("username")) {
+        const requestBody = {
+          content: content,
+          rating: rating
+        };
+
+        axios.post(`${baseUrl}/users/${localStorage.getItem("userid")}/travel/${tid}/review`,
+          requestBody,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+          })
+          .then((res) => {
+            location.reload();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      else {
+        $('#review-form').text('Login to submit a review!');
+      }
+    }
+
     $(document).ready(function () {
       var params = new URLSearchParams(window.location.search);
 
       if (params.has('travelid')) {
         travelId = params.get('travelid');
+        getTravels(travelId);
         getReview(travelId);
       }
+      else {
+        $('#travel-content').html(`<div class="alert alert-warning" role="alert">
+          <h4 class="alert-heading">You're missing the travelid parameter!</h4>
+          <p>Make sure you selected the correct travelid.</p>
+          <hr>
+          <a href="/" class="mb-0">Return to the homepage.</a>
+          </div>`)
+      }
+
+      $('#submit-review').click(function (e) {
+        e.preventDefault();
+        var content = $('#message-review').val();
+        var rating = $('input[name=ratingRadioOptions]:checked', '#review-form').val();
+
+        postReview(travelId, content, rating);
+        return false;
+      })
 
       // If doing add Reviews, make sure to check for XSS
     });

@@ -10,6 +10,8 @@ const utils = require('../utils');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
 
 // ------------------------------------------------------
 // end points
@@ -41,7 +43,7 @@ exports.user_add = (req, res) => {
     userDB.createUser(myUser, function (err, result) {
         if (!err) {
             var output = {
-                "userid" : result
+                "userid": result
             };
             res.status(201).send(output);
         } else {
@@ -75,9 +77,9 @@ exports.user_get = (req, res) => {
 
 // Update a single user. ID and created timestamp should not be updatable. PUT Request
 exports.user_update = (req, res) => {
-    
+
     var myUser = {
-        id : req.params.id,
+        id: req.params.id,
         username: req.body.username,
         email: req.body.email,
         profile_pic_url: req.body.profile_pic_url
@@ -107,14 +109,19 @@ exports.user_add_review = (req, res) => {
         content: req.body.content,
         rating: req.body.rating,
     };
-
+    const window = new JSDOM('').window;
+    const DOMPurify = createDOMPurify(window);
+    var cleanHtml = DOMPurify.sanitize(review.content, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}});
+    
     if (!utils.isNumeric(userid) || !utils.isNumeric(travelid) || !utils.isNumeric(review.rating)) return res.status(400).send("Bad Request");
     if (parseInt(review.rating) < 0 || parseInt(review.rating) > 5) return res.status(400).send("Bad Request");
+    if (cleanHtml === "") return res.status(400).send("Bad Request"); else review.content = cleanHtml;
+    
 
     userDB.createReview(userid, travelid, review, function (err, result) {
         if (!err) {
             var output = {
-                "reviewid" : result
+                "reviewid": result
             }
             res.status(201).send(output);
         } else {
@@ -160,7 +167,8 @@ exports.user_login = (req, res) => {
 
                 var output = {
                     "token": token,
-                    "username": username
+                    "userid": result.userid,
+                    "username": result.username
                 };
 
                 res.status(200).send(JSON.stringify(output));

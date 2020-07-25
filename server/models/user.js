@@ -21,7 +21,7 @@ var userDB = {
         console.log("userDB.loginUser() ...");
 
         // var sql = 'SELECT userid, role FROM user WHERE username=? and password=?';
-        var sql = 'SELECT userid, role, password FROM user WHERE BINARY username=?';
+        var sql = 'SELECT userid, username, role, password FROM user WHERE BINARY username=?';
 
         db.query(sql, [username], function (err, result) {
             if (err) {

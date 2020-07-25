@@ -124,11 +124,7 @@ const middleware = {
             var userid = parseInt(req.decodedToken.userid);
             var role = req.decodedToken.role;
         
-            if (userid !== id) {
-                if (role !== 'admin') {
-                    return res.status(403).send("Forbidden");
-                }
-            }
+            if (userid !== id) return res.status(403).send("Forbidden");
             return next();
         }
         catch (err) {

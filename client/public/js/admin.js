@@ -1,4 +1,4 @@
-if (localStorage.getItem("token") === null || !localStorage.getItem("username")) {
+if (localStorage.getItem("token") === null || localStorage.getItem("userid") === null || !localStorage.getItem("username")) {
     window.location = "/"
 }
 else {
