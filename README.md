@@ -1,5 +1,47 @@
-# Back-end Web Development
-The backend API Specs for SP Travel. The API specs would support functionalities such as user registration, publication of travel listing info, itinerary and user travel reviews.  
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
+<br />
+<p align="center">
+  <a href="https://github.com/ISnackable/Back-end-Web-Development/">
+    <img src="./logo.jpg" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Back-end Web Development</h3>
+
+  <p align="center">
+    The backend API Specs for SP Travel.
+    <br />
+    <a href="https://github.com/ISnackable/Back-end-Web-Development/"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/ISnackable/Back-end-Web-Development/">View Demo</a>
+    ·
+    <a href="https://github.com/ISnackable/Back-end-Web-Development/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/ISnackable/Back-end-Web-Development/issues">Request Feature</a>
+    ·
+    <a href="https://github.com/ISnackable/Back-end-Web-Development/pulls">Send a Pull Request</a>
+  </p>
+</p>
+
+## Table of Contents
+
+* [About the Project](#about-the-project)
+* [Getting Started](#getting-started)
+  * [Dependencies](#dependencies)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Acknowledgements](#acknowledgements)
+
+## About The Project
+
+The backend API Specs for SP Travel. The API specs would support functionalities such as user registration, publication of travel listing info, itinerary and user travel reviews. 
 
 ## Dependencies
 The following tools should be installed before starting:
@@ -22,28 +64,59 @@ npm install -g npm@latest
 
 ### Installation
 
-1. Go to the root of the folder
+1. Go to the `Back-end-Web-Development/server` folder
 2. Create a `.env` file with these contents and replace the <> field with your config.
 ```
-EXPRESS_HOSTNAME=<express ip / hostname>
-EXPRESS_PORT=<express port>
-DB_USERNAME=<database username>
-DB_PASSWORD=<database passsword>
-DB_DATABASE=<database name>
+EXPRESS_HOSTNAME=localhost
+EXPRESS_PORT=8081
+DB_USERNAME=root
+DB_PASSWORD=<database password>
+DB_DATABASE=sptravel
+SECRET=<jwt secret key>
 ```
+3. Open `Back-end-Web-Development/server/docs/sptravel2020-06-18.sql`, select and copy all and paste it in MySQL Workbench
+4. Execute the MySQL statements you copied to MySQL Workbench by clicking the yellow lightning symbol ⚡
+5. Open `Back-end-Web-Development/server/docs/Assignment.postman_collection.json`, and import it into Postman by clicking import and dragging the file into it
+
+### Usage
+To start trying out the web, follow the steps below.
+
+1. Make sure you have all of the dependencies installed
+2. Navigate into the directory `cd Back-end-Web-Development/client`
 3. Install the node_modules
 ```sh
 npm install
 ```
-4. Open `docs/sptravel2020-06-18.sql`, select and copy all and paste it in MySQL Workbench
-5. Execute the MySQL statements you copied to MySQL Workbench by clicking the yellow lightning symbol ⚡
-6. Open `docs/Assignment.postman_collection.json`, and import it into Postman by clicking import and dragging the file into it
+4. Run the app.js file, ```npm run start-dev```
+5. Navigate into the directory `cd Back-end-Web-Development/server`
+6. Install the node_modules
+```sh
+npm install
+```
+7. Run the app.js file, ```npm run start-dev```
+8. Visit `http://localhost:3001` on your web browser
+9. That's all.
 
-### Usage
-To start trying out the server, follow the steps below.
+## License
 
-1. Make sure you have all of the dependencies installed
-2. Navigate into the directory `cd Back-end-Web-Development`
-3. Run the app.js file, ```npm run start-dev```
-4. Try out the requests with Postman
-5. That's all.
+Distributed under the Creative Commons Attribution 3.0 License. Please refer to [colorlib license](https://colorlib.com/wp/licence/). See `LICENSE` for more information.
+
+## Acknowledgements
+
+- [Home Page Template | Author: Joefrey | Colorlib](https://colorlib.com/wp/template/traveland/)
+- [Login Page Template | Author: Aigars | Colorlib](https://colorlib.com/wp/template/login-form-v10/)
+- [Error Page Template | Author: Adam Quinlan | September 14, 2018](https://freefrontend.com/500-error-page-html-templates/)
+- [Img Shields](https://shields.io/)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/ISnackable/Back-end-Web-Development.svg?style=flat-square
+[contributors-url]: https://github.com/ISnackable/Back-end-Web-Development/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/ISnackable/Back-end-Web-Development.svg?style=flat-square
+[forks-url]: https://github.com/ISnackable/Back-end-Web-Development/network/members
+[stars-shield]: https://img.shields.io/github/stars/ISnackable/Back-end-Web-Development.svg?style=flat-square
+[stars-url]: https://github.com/ISnackable/Back-end-Web-Development/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ISnackable/Back-end-Web-Development.svg?style=flat-square
+[issues-url]: https://github.com/ISnackable/Back-end-Web-Development/issues
+[license-shield]: https://img.shields.io/github/license/ISnackable/Back-end-Web-Development.svg?style=flat-square
+[license-url]: https://github.com/ISnackable/Back-end-Web-Development/blob/master/LICENSE.md
