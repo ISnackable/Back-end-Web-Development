@@ -52,7 +52,7 @@
 						Login
 					</span>
 
-					<div id="msg" class="mx-auto mb-4"></div>
+					<div id="msg" class="mb-4"></div>
 					<div class="wrap-input100 validate-input m-b-16" data-validate="Username is required">
 						<input class="input100" id="username" type="text" name="username" placeholder="Username">
 						<span class="focus-input100"></span>
@@ -135,7 +135,11 @@
 					})
 					.catch((error) => {
 						if (error.response.status === 401) {
-							$('#msg').html('Login failed!');
+							$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Login failed!</div>`);
+							$('#msg').fadeOut(2400);
+							setTimeout(function () {
+								$('#msg').replaceWith(`<div id="msg"></div>`);
+							}, 2500)
 						}
 						else {
 							console.error(error);
@@ -143,7 +147,11 @@
 					});
 			}
 			else {
-				$('#msg').html('Fill in username and password!');
+				$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Fill in username and password!</div>`);
+				$('#msg').fadeOut(2400);
+				setTimeout(function () {
+					$('#msg').replaceWith(`<div id="msg"></div>`);
+				}, 2500)
 			}
 		});
 

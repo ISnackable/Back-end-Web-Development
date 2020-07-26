@@ -95,6 +95,7 @@
             <div class="comment-form-wrap pt-5">
               <h3 class="mb-5">Post a review</h3>
               <form id="review-form" class="p-5 bg-light">
+                <div id="review-form-msg"></div>
                 <div class="form-group">
                   <div>
                     <label for="rating">Rating *</label>
@@ -413,7 +414,7 @@
 
       var cleanHtml = DOMPurify.sanitize(content, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
 
-      if (cleanHtml !== "" && localStorage.getItem("token") !== null && localStorage.getItem("userid") !== null && localStorage.getItem("username")) {
+      if (cleanHtml !== "" && rating != null) {
         const requestBody = {
           content: content,
           rating: rating
@@ -427,14 +428,23 @@
             }
           })
           .then((res) => {
-            location.reload();
+            getReview(tid);
           })
           .catch((error) => {
+            if (error.response.status === 409) {
+              $('#review-form-msg').replaceWith(`<div class="alert alert-warning text-center" role="alert" id="review-form-msg">You already posted a review!</div>`).fadeOut(2400);;
+              setTimeout(function () {
+                $('#review-form-msg').replaceWith(`<div id="review-form-msg"></div>`);
+              }, 2500)
+            }
             console.error(error);
           });
       }
       else {
-        $('#review-form').text('Login to submit a review!');
+        $('#review-form-msg').replaceWith(`<div class="alert alert-warning text-center" role="alert" id="review-form-msg">Do not leave the fields empty!</div>`).fadeOut(2400);;
+        setTimeout(function () {
+          $('#review-form-msg').replaceWith(`<div id="review-form-msg"></div>`);
+        }, 2500)
       }
     }
 
@@ -453,6 +463,10 @@
           <hr>
           <a href="/" class="mb-0">Return to the homepage.</a>
           </div>`)
+      }
+
+      if (localStorage.getItem("token") === null && localStorage.getItem("userid") === null && !localStorage.getItem("username")) {
+        $('#review-form').text('Login to submit a review!');
       }
 
       $('#submit-review').click(function (e) {

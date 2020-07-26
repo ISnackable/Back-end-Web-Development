@@ -267,11 +267,11 @@
       axios.get(`http://localhost:8081/travel/${id}/itinerary`)
         .then((reponse) => {
           number_of_day = reponse.data.length;
-          $(`#itinerary-travel-${id}`).html(number_of_day);
+          $(`#itinerary-travel-${id}`).text(number_of_day);
         })
         .catch((error) => {
           if (error.response.status === 404) {
-            $(`#itinerary-travel-${id}`).html(0);
+            $(`#itinerary-travel-${id}`).text(0);
           }
           else {
             console.error(error)

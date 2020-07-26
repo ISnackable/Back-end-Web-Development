@@ -117,7 +117,6 @@ exports.user_add_review = (req, res) => {
     if (parseInt(review.rating) < 0 || parseInt(review.rating) > 5) return res.status(400).send("Bad Request");
     if (cleanHtml === "") return res.status(400).send("Bad Request"); else review.content = cleanHtml;
     
-
     userDB.createReview(userid, travelid, review, function (err, result) {
         if (!err) {
             var output = {
