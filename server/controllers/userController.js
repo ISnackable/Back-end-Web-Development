@@ -55,6 +55,9 @@ exports.user_add = (req, res) => {
             if (err.code == 'ER_DUP_ENTRY') {
                 res.status(409).send("Conflict. Duplicated entry found!");
             }
+            else if (err.code == 'ER_BAD_NULL_ERROR') {
+                res.status(400).send("Bad Request");
+            }
             else {
                 res.status(500).send("Internal Server Error");
             }
@@ -100,7 +103,12 @@ exports.user_update = (req, res) => {
                 res.status(422).send("Unprocessable Entity");
             }
         } else {
-            res.status(500).send("Internal Server Error");
+            if (err.code == 'ER_BAD_NULL_ERROR') {
+                res.status(400).send("Bad Request");
+            }
+            else {
+                res.status(500).send("Internal Server Error");
+            }
         }
     });
 };
@@ -134,6 +142,9 @@ exports.user_add_review = (req, res) => {
             }
             else if (err.code == 'ER_NO_REFERENCED_ROW_2') {
                 res.status(404).send("Travel not found!");
+            }
+            else if (err.code == 'ER_BAD_NULL_ERROR') {
+                res.status(400).send("Bad Request");
             }
             else {
                 res.status(500).send("Internal Server Error");

@@ -64,8 +64,6 @@ exports.travel_list = (req, res) => {
 
 // Used to add a new travel listing listing to the database. POST REQUEST
 exports.travel_add = (req, res) => {
-    // Add upload image endpoint here.MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??MAYBE??
-
     var travelPeriod = new Date(req.body.travelPeriod);
 
     // Check if travelPeriod request is valid 
@@ -87,6 +85,9 @@ exports.travel_add = (req, res) => {
             } else {
                 if (err.code == 'ER_DUP_ENTRY') {
                     res.status(409).send("Conflict. Duplicated entry found!");
+                }
+                else if (err.code == 'ER_BAD_NULL_ERROR') {
+                    res.status(400).send("Bad Request");
                 }
                 else {
                     res.status(500).send("Internal Server Error");
@@ -138,11 +139,14 @@ exports.travel_update = (req, res) => {
                     res.status(204).send("No Content");
                 }
                 else {
-                    res.status(202).send("Accepted");
+                    res.status(404).send("Not Found!");
                 }
             } else {
                 if (err.code == 'ER_DUP_ENTRY') {
                     res.status(409).send("Conflict. Duplicated entry found!");
+                }
+                else if (err.code == 'ER_BAD_NULL_ERROR') {
+                    res.status(400).send("Bad Request");
                 }
                 else {
                     res.status(500).send("Internal Server Error");
@@ -194,6 +198,9 @@ exports.travel_itineraries_add = (req, res) => {
             }
             else if (err.code == 'ER_DUP_ENTRY') {
                 res.status(409).send("Conflict. Duplicated entry found!");
+            }
+            else if (err.code == 'ER_BAD_NULL_ERROR') {
+                res.status(400).send("Bad Request");
             }
             else {
                 res.status(500).send("Internal Server Error");
@@ -317,6 +324,9 @@ exports.travel_promotion_add = (req, res) => {
             } else {
                 if (err.code == 'ER_DUP_ENTRY') {
                     res.status(409).send("Conflict. Duplicated entry found!");
+                }
+                else if (err.code == 'ER_BAD_NULL_ERROR') {
+                    res.status(400).send("Bad Request");
                 }
                 else {
                     res.status(500).send("Internal Server Error");
