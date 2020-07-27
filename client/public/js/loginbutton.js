@@ -13,5 +13,5 @@ $('#logout').on('click', function () {
     localStorage.removeItem("token");
     localStorage.removeItem("userid");
     localStorage.removeItem("username");
-    location.reload();
+    location.href = '/';
 });

@@ -34,10 +34,15 @@ exports.user_list = (req, res) => {
 
 // Used to add a new user to the database. POST Request
 exports.user_add = (req, res) => {
+    const password1 = req.body.password1;
+    const password2 = req.body.password2;
+    if (password1 !== password2 || (!password1 || !password2)) return res.status(400).send("Bad Request");
+
+    const hash = bcrypt.hashSync(password1, 10);
     var myUser = {
         username: req.body.username,
         email: req.body.email,
-        profile_pic_url: req.body.profile_pic_url
+        password: hash,
     };
 
     userDB.createUser(myUser, function (err, result) {

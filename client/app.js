@@ -40,6 +40,10 @@ app.get("/login", (req, res) => {
     res.sendFile("/public/login.html", { root: __dirname });
 });
 
+app.get("/register", (req, res) => {
+    res.sendFile("/public/register.html", { root: __dirname });
+});
+
 app.get("/search", (req, res) => {
     res.sendFile("/public/result.html", { root: __dirname });
 });
@@ -60,14 +64,19 @@ app.get("/manage-itinerary", (req, res) => {
     res.sendFile("/public/manage-itinerary.html", { root: __dirname });
 });
 
-app.use(serveStatic(__dirname + "/public"));
-
-// For any other routes
-app.use((req, res) => {
+app.get("/error", (req, res) => {
     res.status(404);
     res.contentType('html');
     res.sendFile('/public/error.html', { root: __dirname });
 });
+
+app.use(serveStatic(__dirname + "/public"));
+
+// For any other routes
+app.use((req, res) => {
+    res.redirect("/error");
+});
+
 
 app.listen(port, hostname, function () {
     console.log(`Server hosted at http://${hostname}:${port}`);

@@ -1,5 +1,5 @@
 if (localStorage.getItem("token") === null || localStorage.getItem("userid") === null || !localStorage.getItem("username")) {
-    window.location = "/"
+    window.location.href  = "/error";
 }
 else {
     $.ajax({
@@ -10,7 +10,7 @@ else {
             // Do nothing
         },
         error: function () {
-            window.location = "/"
+            window.location.href = "/error";
         }
     });
 }  

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>SP Travel - Login</title>
+	<title>SP Travel - Register</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -47,41 +47,39 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-t-50 p-b-90">
-				<form class="login100-form validate-form flex-sb flex-w" id="login-form">
+				<form class="login100-form validate-form flex-sb flex-w" id="register-form">
 					<span class="login100-form-title p-b-51">
-						Login
+						Register
 					</span>
-
-					<div id="msg" class="mb-4"></div>
+                    
+                    <div id="msg" class="mb-4"></div>
+                    <label for="username">Username:</label>
 					<div class="wrap-input100 validate-input m-b-16" data-validate="Username is required">
 						<input class="input100" id="username" type="text" name="username" placeholder="Username">
 						<span class="focus-input100"></span>
 					</div>
 
-
-					<div class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
-						<input class="input100" id="password" type="password" name="pass" placeholder="Password">
+                    <label for="email">Email:</label>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Email is required">
+						<input class="input100" id="email" type="email" name="email" placeholder="Email">
 						<span class="focus-input100"></span>
-					</div>
+                    </div>
 
-					<div class="flex-sb-m w-full p-t-3 p-b-24">
-						<div class="contact100-form-checkbox">
-							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-							<label class="label-checkbox100" for="ckb1">
-								Remember me
-							</label>
-						</div>
-
-						<div>
-							<a href="/register" class="txt1">
-								Click here to register
-							</a>
-						</div>
+                    <label for="pass1" class="d-inline">Password:</label>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
+						<input class="input100" id="password1" type="password" name="pass1" placeholder="•••••••••••">
+						<span class="focus-input100"></span>
+                    </div>
+                    
+                    <label for="pass2">Confirm Password:</label>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Password is required">
+						<input class="input100" id="password2" type="password" name="pass2" placeholder="•••••••••••">
+						<span class="focus-input100"></span>
 					</div>
 
 					<div class="container-login100-form-btn m-t-17">
 						<button class="login100-form-btn">
-							Login
+							Register
 						</button>
 					</div>
 
@@ -110,44 +108,45 @@
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
 		const baseUrl = "http://localhost:8081";
-		$("#login-form").submit((event) => {
+		$("#register-form").submit((event) => {
 			// prevent page reload
 			event.preventDefault();
 
 			const username = $("#username").val();
-			const password = $("#password").val();
+			const email = $("#email").val();
+			const password1 = $("#password1").val();
+			const password2 = $("#password2").val();
 
-			if (username && password) {
+			if (username && email && password1 && password1 === password2) {
 				const requestBody = {
 					username: username,
-					password: password
+					email: email,
+					password1: password1,
+					password2: password2
 				};
 
-				axios.post(`${baseUrl}/users/login`, requestBody)
+				axios.post(`${baseUrl}/users/`, requestBody)
 					.then((response) => {
-						const token = response.data.token;
-						const userid = response.data.userid;
-						const username = response.data.username;
-						localStorage.setItem("token", token);
-						localStorage.setItem("userid", userid);
-						localStorage.setItem("username", username);
-						window.location.href = "/";
+						window.location.href = "/login";
 					})
 					.catch((error) => {
-						if (error.response.status === 401) {
-							$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Login failed!</div>`);
-							$('#msg').fadeOut(2400);
-							setTimeout(function () {
-								$('#msg').replaceWith(`<div id="msg"></div>`);
-							}, 2500)
-						}
-						else {
-							console.error(error);
-						}
+                        $('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Register failed!</div>`);
+                        $('#msg').fadeOut(2400);
+                        setTimeout(function () {
+                            $('#msg').replaceWith(`<div id="msg"></div>`);
+                        }, 2500)
+                        console.error(error);
 					});
-			}
+            }
+            else if (password1 !== password2) {
+                $('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Password are not the same!</div>`);
+				$('#msg').fadeOut(2400);
+				setTimeout(function () {
+					$('#msg').replaceWith(`<div id="msg"></div>`);
+				}, 2500)
+            }
 			else {
-				$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Fill in username and password!</div>`);
+				$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Fill in all the required fields!</div>`);
 				$('#msg').fadeOut(2400);
 				setTimeout(function () {
 					$('#msg').replaceWith(`<div id="msg"></div>`);

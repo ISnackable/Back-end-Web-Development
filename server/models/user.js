@@ -61,9 +61,9 @@ var userDB = {
     createUser: function (user, callback) {
         console.log("userDB.createUser() ...");
 
-        var sql = 'INSERT INTO user (username, email, profile_pic_url) VALUES (?, ?, ?)';
+        var sql = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
 
-        db.query(sql, [user.username, user.email, user.profile_pic_url], function (err, result) {
+        db.query(sql, [user.username, user.email, user.password, user.profile_pic_url], function (err, result) {
             if (err) {
                 console.error(err);
                 return callback(err, null);
