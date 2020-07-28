@@ -17,19 +17,19 @@ const middleware = require('../middlewares');
 app.get('/', travel_controller.travel_list);
 
 // Used to add a new travel listing listing to the database.
-app.post('/', middleware.verifyToken, middleware.authAdmin, travel_controller.travel_add);
+app.post('/', middleware.verifyToken, middleware.authAdmin, middleware.bodySanitation, travel_controller.travel_add);
 
 // Deletes a travel listing given its id. The associated itinerary and reviews related to the travel listing would also be deleted. Idempotent. 
 app.delete('/:id', middleware.idSanitation, middleware.verifyToken, middleware.authAdmin, travel_controller.travel_delete);
 
 // Updates a travel listing.
-app.put('/:id', middleware.idSanitation, middleware.verifyToken, middleware.authAdmin, travel_controller.travel_update);
+app.put('/:id', middleware.idSanitation, middleware.verifyToken, middleware.authAdmin, middleware.bodySanitation, travel_controller.travel_update);
 
 // Retrieves all the itineraries of a particular travel listing.
 app.get('/:id/itinerary', middleware.idSanitation, travel_controller.travel_itineraries_list);
 
 // Add a one day itinerary for that travel listing. A travel listing can have a multiple day itinerary and thus we can many itinerary records for one travel listing.
-app.post('/:id/itinerary', middleware.idSanitation, middleware.verifyToken, middleware.authAdmin, travel_controller.travel_itineraries_add);
+app.post('/:id/itinerary', middleware.idSanitation, middleware.verifyToken, middleware.authAdmin, middleware.bodySanitation, travel_controller.travel_itineraries_add);
 
 // Retrieves reviews of a particular travel listing, including info like the username. (A table join is required). Note the created_at field retrieved is the creation datetime of the travel review.
 app.get('/:id/review', middleware.idSanitation, travel_controller.travel_review_get);
@@ -44,7 +44,7 @@ app.put('/:id/thumbnail', middleware.idSanitation, middleware.verifyToken, middl
 app.get('/:id/promotion', middleware.idSanitation, travel_controller.travel_promotion_get);
 
 // Add the travel listing's promotion period, discount amount. POST Request
-app.post('/:id/promotion', middleware.verifyToken, middleware.authAdmin, travel_controller.travel_promotion_add);
+app.post('/:id/promotion', middleware.verifyToken, middleware.authAdmin, middleware.bodySanitation, travel_controller.travel_promotion_add);
 
 // Delete the travel listing's promotion period, discount amount. DELETE Request
 app.delete('/:tid/promotion/:pid', middleware.verifyToken, middleware.authAdmin, travel_controller.travel_promotion_delete);
