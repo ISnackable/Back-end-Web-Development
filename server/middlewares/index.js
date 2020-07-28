@@ -11,6 +11,7 @@ const config = require('../config');
 const utils = require('../utils');
 const jwt = require('jsonwebtoken');
 const { type } = require('os');
+const userDB = require('../models/user');
 
 // ------------------------------------------------------
 // multer config
@@ -107,12 +108,6 @@ const middleware = {
                     console.log("decoded values: " + JSON.stringify(decoded));
 
                     req.decodedToken = decoded;
-                    // // decode the userid and store in req for use
-                    // req.userid = decoded.userid;
-
-                    // // decode the role and store in req for use
-                    // req.role = decoded.role;
-
                     next();
                 }
             });
@@ -122,8 +117,7 @@ const middleware = {
         try {
             var id = req.params.id ? parseInt(req.params.id) : parseInt(req.params.uid);
             var userid = parseInt(req.decodedToken.userid);
-            var role = req.decodedToken.role;
-        
+
             if (userid !== id) return res.status(403).send("Forbidden");
             return next();
         }
@@ -132,18 +126,20 @@ const middleware = {
         }
     },
     authAdmin: (req, res, next) => {
-        try {
-            var role = req.decodedToken.role;
-        
-            if (role !== 'admin') {
-                console.log("Not Admin!")
-                return res.status(403).send("Forbidden");
+        var userid = parseInt(req.decodedToken.userid);
+
+        userDB.getRole(userid, function (err, result) {
+            if (err) {
+                return res.status(500).send("Internal Server Error");
             }
-            return next();
-        }
-        catch (err) {
-            return res.status(500).send("Internal Server Error");
-        }
+            if (result) {
+                if (result.role === 'admin') {
+                    console.log("User is admin.");
+                    return next();
+                }
+            }
+            return res.status(403).send("Forbidden");
+        });
     }
 };
 

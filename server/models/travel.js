@@ -58,7 +58,7 @@ var travelDB = {
     getAll: function (callback) {
         console.log("travelDB.getAll() ...");
 
-        var sql = 'SELECT travelid, title, description, price, country, DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod" FROM travel';
+        var sql = 'SELECT travelid, title, description, price, country, DATE_FORMAT(travelPeriod, "%b %Y") AS "travelPeriod", thumbnail FROM travel';
 
         db.query(sql, [], function (err, result) {
             if (err) {
@@ -98,7 +98,7 @@ var travelDB = {
                 console.log(err);
                 return callback(err, null);
             } else {
-                if (result.length == 0) {
+                if (result.affectedRows == 0) {
                     return callback(null, null);
                 }
                 else {

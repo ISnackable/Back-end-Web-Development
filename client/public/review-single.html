@@ -42,7 +42,7 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
-          <li class="nav-item active"><a href="/reviews" class="nav-link">Reviews</a></li>
+          <li class="nav-item active"><a href="/destinations" class="nav-link">Destinations</a></li>
           <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -404,7 +404,7 @@
             <p>Make sure you selected the correct travelid.</p>
             <hr>
             <a href="/" class="mb-0">Return to the homepage.</a>
-            </div>`)
+            </div>`);
           }
         });
     }
@@ -432,7 +432,7 @@
           })
           .catch((error) => {
             if (error.response.status === 409) {
-              $('#review-form-msg').replaceWith(`<div class="alert alert-warning text-center" role="alert" id="review-form-msg">You already posted a review!</div>`).fadeOut(2400);;
+              $('#review-form-msg').replaceWith(`<div class="alert alert-warning text-center" role="alert" id="review-form-msg">You already posted a review!</div>`).fadeOut(2400);
               setTimeout(function () {
                 $('#review-form-msg').replaceWith(`<div id="review-form-msg"></div>`);
               }, 2500)
@@ -441,7 +441,7 @@
           });
       }
       else {
-        $('#review-form-msg').replaceWith(`<div class="alert alert-warning text-center" role="alert" id="review-form-msg">Do not leave the fields empty!</div>`).fadeOut(2400);;
+        $('#review-form-msg').replaceWith(`<div class="alert alert-warning text-center" role="alert" id="review-form-msg">Do not leave the fields empty!</div>`).fadeOut(2400);
         setTimeout(function () {
           $('#review-form-msg').replaceWith(`<div id="review-form-msg"></div>`);
         }, 2500)
@@ -450,9 +450,9 @@
 
     $(document).ready(function () {
       var params = new URLSearchParams(window.location.search);
+      var travelId = params.get('travelid');
 
-      if (params.has('travelid')) {
-        travelId = params.get('travelid');
+      if (travelId) {
         getTravels(travelId);
         getReview(travelId);
       }
@@ -462,7 +462,7 @@
           <p>Make sure you selected the correct travelid.</p>
           <hr>
           <a href="/" class="mb-0">Return to the homepage.</a>
-          </div>`)
+          </div>`);
       }
 
       if (localStorage.getItem("token") === null && localStorage.getItem("userid") === null && !localStorage.getItem("username")) {

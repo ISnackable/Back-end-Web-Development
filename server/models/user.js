@@ -17,6 +17,25 @@ console.log("------------------------------------");
 var db = require('./index.js');
 
 var userDB = {
+    getRole: function (id, callback) {
+        console.log("userDB.getRole() ...");
+
+        var sql = 'SELECT role FROM user WHERE userid = ?';
+
+        db.query(sql, [id], function (err, result) {
+            if (err) {
+                console.error(err);
+                return callback(err, null);
+            } else {
+                if (result.length == 0) {
+                    return callback(null, null);
+                }
+                else {
+                    return callback(null, result[0]);
+                }
+            }
+        });
+    },
     loginUser: function (username, callback) {
         console.log("userDB.loginUser() ...");
 
@@ -37,7 +56,6 @@ var userDB = {
                 }
             }
         });
-
     },
     getAll: function (callback) {
         console.log("userDB.getAll() ...");

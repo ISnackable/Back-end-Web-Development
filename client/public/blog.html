@@ -42,7 +42,7 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
-          <li class="nav-item active"><a href="/reviews" class="nav-link">Reviews</a></li>
+          <li class="nav-item active"><a href="/destinations" class="nav-link">Destinations</a></li>
           <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -59,9 +59,9 @@
     <div class="container">
       <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
         <div class="col-md-9 ftco-animate pb-5 text-center">
-          <h1 class="mb-3 bread">List of travel's reviews</h1>
+          <h1 class="mb-3 bread">List of travels</h1>
           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i
-                  class="ion-ios-arrow-forward"></i></a></span> <span>Reviews <i class="ion-ios-arrow-forward"></i></span>
+                  class="ion-ios-arrow-forward"></i></a></span> <span>Destinations <i class="ion-ios-arrow-forward"></i></span>
           </p>
         </div>
       </div>
@@ -233,7 +233,7 @@
       return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
     }
 
-    function createCard(id, title, description, country, travelPeriod) {
+    function createCard(id, title, description, country, travelPeriod, thumbnail) {
       var date = new Date(travelPeriod);
       var month = date.toLocaleString('default', { month: 'long' });
       var year = date.getFullYear();
@@ -241,7 +241,7 @@
       var html = `
       <div class="col-md-4 d-flex">
           <div class="blog-entry justify-content-end">
-            <a href="/review-single?travelid=${id}" class="block-20" style="background-image: url('${"images/image_" + getRandomIntInclusive(1,6) + ".jpg"}');">
+            <a href="/review-single?travelid=${id}" class="block-20" style="background-image: url('${(thumbnail != null && thumbnail != "") ? "http://localhost:8081/" + thumbnail : "images/image_" + getRandomIntInclusive(1,6) + ".jpg"}');">
             </a>
             <div class="text mt-3 float-right d-block">
               <div class="d-flex align-items-center pt-2 mb-4 topp">
@@ -288,7 +288,7 @@
           $('#cards').empty();
 
           travels.forEach((travel) => {
-            var card = createCard(travel.travelid, travel.title, travel.description, travel.country, travel.travelPeriod);
+            var card = createCard(travel.travelid, travel.title, travel.description, travel.country, travel.travelPeriod, travel.thumbnail);
 
             // append this to the cards containers
             $('#cards').append(card);

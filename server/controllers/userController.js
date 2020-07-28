@@ -163,30 +163,35 @@ exports.user_login = (req, res) => {
             if (result) {
                 if (!bcrypt.compareSync(password, result.password)) return res.status(401).send("Login has failed.");
 
-                console.log("Private Key: " + config.JWT_SECRET);
-
-                // since there is a matching record, this is the
-                // place to generate the JWT token
-                var token = jwt.sign(
+                // since there is a matching record, this is the place to generate the JWT token
+                jwt.sign(
                     {
                         // payload
-                        userid: result.userid,
-                        role: result.role
+                        userid: result.userid
                     },
                     config.JWT_SECRET,
                     {
                         // expires in 24 hrs = 24 * 60 * 60
                         expiresIn: 86400//expires in 24 hrs
+                    },
+                    function (error, token) {
+                        if (error) {
+                            console.error(error);
+                            console.log("Token generation failed.");
+                              
+                            res.status(401).send("Login has failed.");
+                        }
+                        else {
+                            var output = {
+                                "token": token,
+                                "userid": result.userid,
+                                "username": result.username
+                            };
+                            res.status(200).send(JSON.stringify(output));
+                        }
                     }
                 );
 
-                var output = {
-                    "token": token,
-                    "userid": result.userid,
-                    "username": result.username
-                };
-
-                res.status(200).send(JSON.stringify(output));
             }
             else {
                 res.status(401).send("Login has failed.");

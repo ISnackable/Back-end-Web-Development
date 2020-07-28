@@ -28,7 +28,7 @@ app.get("/about", (req, res) => {
     res.sendFile("/public/about.html", { root: __dirname });
 });
 
-app.get("/reviews", (req, res) => {
+app.get("/destinations", (req, res) => {
     res.sendFile("/public/blog.html", { root: __dirname });
 });
 
