@@ -109,52 +109,58 @@
 	<script src="js/loginbutton.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
-		const baseUrl = "http://localhost:8081";
-		$("#login-form").submit((event) => {
-			// prevent page reload
-			event.preventDefault();
+		$(document).ready(function () {
+			if (localStorage.getItem("token") === null && localStorage.getItem("userid") === null && localStorage.getItem("username") === null) {
+				const baseUrl = "http://localhost:8081";
+				$("#login-form").submit((event) => {
+					// prevent page reload
+					event.preventDefault();
 
-			const username = $("#username").val();
-			const password = $("#password").val();
+					const username = $("#username").val();
+					const password = $("#password").val();
 
-			if (username && password) {
-				const requestBody = {
-					username: username,
-					password: password
-				};
+					if (username && password) {
+						const requestBody = {
+							username: username,
+							password: password
+						};
 
-				axios.post(`${baseUrl}/users/login`, requestBody)
-					.then((response) => {
-						const token = response.data.token;
-						const userid = response.data.userid;
-						const username = response.data.username;
-						localStorage.setItem("token", token);
-						localStorage.setItem("userid", userid);
-						localStorage.setItem("username", username);
-						window.location.href = "/";
-					})
-					.catch((error) => {
-						if (error.response.status === 401) {
-							$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Login failed!</div>`);
-							$('#msg').fadeOut(2400);
-							setTimeout(function () {
-								$('#msg').replaceWith(`<div id="msg"></div>`);
-							}, 2500)
-						}
-						else {
-							console.error(error);
-						}
-					});
+						axios.post(`${baseUrl}/users/login`, requestBody)
+							.then((response) => {
+								const token = response.data.token;
+								const userid = response.data.userid;
+								const username = response.data.username;
+								localStorage.setItem("token", token);
+								localStorage.setItem("userid", userid);
+								localStorage.setItem("username", username);
+								window.location.href = "/";
+							})
+							.catch((error) => {
+								if (error.response.status === 401) {
+									$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Login failed!</div>`);
+									$('#msg').fadeOut(2400);
+									setTimeout(function () {
+										$('#msg').replaceWith(`<div id="msg"></div>`);
+									}, 2500)
+								}
+								else {
+									console.error(error);
+								}
+							});
+					}
+					else {
+						$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Fill in username and password!</div>`);
+						$('#msg').fadeOut(2400);
+						setTimeout(function () {
+							$('#msg').replaceWith(`<div id="msg"></div>`);
+						}, 2500)
+					}
+				});
 			}
 			else {
-				$('#msg').replaceWith(`<div class="wrap-input100 alert alert-warning text-center" role="alert" id="msg">Fill in username and password!</div>`);
-				$('#msg').fadeOut(2400);
-				setTimeout(function () {
-					$('#msg').replaceWith(`<div id="msg"></div>`);
-				}, 2500)
+				location.href = '/';
 			}
 		});
-
 	</script>
 
 </body>
