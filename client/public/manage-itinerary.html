@@ -227,6 +227,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/loginbutton.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="js/purify.min.js"></script>
     <script>
         function createCard(index, id, title, price, country, travelPeriod) {
             var date = new Date(travelPeriod);
@@ -284,11 +285,11 @@
             axios.get(`http://localhost:8081/travel/${id}/itinerary`)
                 .then((reponse) => {
                     number_of_day = reponse.data.length;
-                    $(`#itinerary-travel-${id}`).html(number_of_day);
+                    $(`#itinerary-travel-${id}`).text(number_of_day);
                 })
                 .catch((error) => {
                     if (error.response.status === 404) {
-                        $(`#itinerary-travel-${id}`).html(0);
+                        $(`#itinerary-travel-${id}`).text(0);
                     }
                     else {
                         console.error(error)
@@ -314,7 +315,7 @@
                 .catch((error) => {
                     if (error.response.status === 404) {
                         // console.log("Not Found!")
-                        $(`#table-body`).html("No travels yet");
+                        $(`#table-body`).text("No travels yet");
                     }
                     else {
                         console.error(error);
@@ -328,7 +329,7 @@
                 const travel = travels[index];
 
                 var itinerary_day = $(`#travel-${travel.travelid}-itinerary-day`).val();
-                var itinerary_description = $(`#travel-${travel.travelid}-itinerary-description`).val();
+                var itinerary_description = DOMPurify.sanitize($(`#travel-${travel.travelid}-itinerary-description`).val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
 
                 if (itinerary_day !== "" && itinerary_description !== "") {
                     const requestBody = {

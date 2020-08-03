@@ -306,7 +306,7 @@
         .catch((error) => {
           if (error.response.status === 404) {
             // console.log("Not Found!")
-            $(`#travel-${id}-itinerary-body`).html("No itinerarys yet");
+            $(`#travel-${id}-itinerary-body`).text("No itinerarys yet");
           }
           else {
             console.error(error);

@@ -477,7 +477,7 @@
                                         <label for="tour-description" class="col-md-12">Description</label>
                                         <div class="col-md-12">
                                             <textarea class="form-control mt-3" id="tour-description"
-                                                rows="3"></textarea>
+                                                rows="3" required></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -574,6 +574,7 @@
     <script src="js/custom.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/loginbutton.js"></script>
+    <script type="text/javascript" src="js/purify.min.js"></script>
     <script>
         function createCard(index, id, title, price, country, travelPeriod, description) {
             var date = new Date(travelPeriod);
@@ -919,7 +920,7 @@
                 .catch((error) => {
                     if (error.response.status === 404) {
                         // console.log("Not Found!")
-                        $(`#table-body`).html("No travels yet");
+                        $(`#table-body`).text("No travels yet");
                     }
                     else {
                         console.error(error);
@@ -967,10 +968,10 @@
             })
 
             $('#add-travel-button').click(function (e) {
-                var title = $('#tour-title').val();
-                var description = $('#tour-description').val();
+                var title =  DOMPurify.sanitize($('#tour-title').val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
+                var description = DOMPurify.sanitize($('#tour-description').val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
                 var price = $('#tour-cost').val();
-                var country = $('#tour-country').val();
+                var country = DOMPurify.sanitize($('#tour-country').val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
                 var travelPeriod = $('#tour-date').val();
 
                 if (title && description && price && country && travelPeriod) {
@@ -1005,7 +1006,7 @@
                                     })
                             }
                             $('#travel-message').addClass('alert alert-success');
-                            $('#travel-message').html('New travel successful added!');
+                            $('#travel-message').text('New travel successful added!');
                             $(`#travel-message`).fadeOut(2400);
                             setTimeout(function () {
                                 $('#travel-message').removeClass('alert alert-success').empty().removeAttr('style');;
@@ -1015,11 +1016,11 @@
                         .catch((error) => {
                             $('#travel-message').addClass('alert alert-warning').fadeOut(2400);
                             if (error.response.status === 409) {
-                                $('#travel-message').html('Travel already added!');
+                                $('#travel-message').text('Travel already added!');
                             }
                             else {
                                 console.error(error);
-                                $('#travel-message').html('Opps, something went wrong!');
+                                $('#travel-message').text('Opps, something went wrong!');
                             }
                             setTimeout(function () {
                                 $('#travel-message').removeClass('alert alert-warning').empty().removeAttr('style');
@@ -1028,7 +1029,7 @@
                 }
                 else {
                     $('#travel-message').addClass('alert alert-warning');
-                    $('#travel-message').html('Fill in the required box.');
+                    $('#travel-message').text('Fill in the required box.');
                     $(`#travel-message`).fadeOut(2400);
                     setTimeout(function () {
                         $('#travel-message').removeClass('alert alert-warning').empty().removeAttr('style');
@@ -1069,11 +1070,11 @@
                 const index = parseInt($(this).attr("data-index"));
                 const travel = travels[index];
 
-                var title = $(`#update-tour-${index}-title`).val();
+                var title = DOMPurify.sanitize($(`#update-tour-${index}-title`).val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
                 var price = $(`#update-tour-${index}-price`).val();
                 var travelPeriod = $(`#update-tour-${index}-date`).val();
-                var country = $(`#update-tour-${index}-country`).val();
-                var description = $(`#update-tour-${index}-description`).val();
+                var country = DOMPurify.sanitize($(`#update-tour-${index}-country`).val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
+                var description = DOMPurify.sanitize($(`#update-tour-${index}-description`).val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
 
                 if (title && description && price && country && travelPeriod) {
                     const requestBody = {

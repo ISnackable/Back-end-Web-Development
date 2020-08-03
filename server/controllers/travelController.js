@@ -11,6 +11,12 @@ const middleware = require('../middlewares');
 const FileType = require('file-type');
 const path = require('path');
 const fs = require('fs')
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+// Constants
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 // ------------------------------------------------------
 // end points
@@ -21,7 +27,6 @@ exports.travel_search = (req, res) => {
 
     // Check if travelPeriod request is valid 
     if (travelPeriod instanceof Date && !isNaN(travelPeriod)) {
-
         var travel = {
             country: req.body.country,
             travelPeriod: travelPeriod,
@@ -69,10 +74,10 @@ exports.travel_add = (req, res) => {
     // Check if travelPeriod request is valid 
     if (travelPeriod instanceof Date && !isNaN(travelPeriod)) {
         var travel = {
-            title: req.body.title,
-            description: req.body.description,
+            title: DOMPurify.sanitize(req.body.title, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
+            description: DOMPurify.sanitize(req.body.description, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             price: req.body.price,
-            country: req.body.country,
+            country: DOMPurify.sanitize(req.body.country, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             travelPeriod: travelPeriod
         };
 
@@ -86,7 +91,7 @@ exports.travel_add = (req, res) => {
                 if (err.code == 'ER_DUP_ENTRY') {
                     res.status(409).send("Conflict. Duplicated entry found!");
                 }
-                else if (err.code == 'ER_BAD_NULL_ERROR') {
+                else if (err.code == 'ER_BAD_NULL_ERROR' || err.code == 'ER_DATA_TOO_LONG') {
                     res.status(400).send("Bad Request");
                 }
                 else {
@@ -126,10 +131,10 @@ exports.travel_update = (req, res) => {
     if ((travelPeriod instanceof Date && !isNaN(travelPeriod)) && utils.isNumeric(id)) {
         var travel = {
             id: id,
-            title: req.body.title,
-            description: req.body.description,
+            title: DOMPurify.sanitize(req.body.title, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
+            description: DOMPurify.sanitize(req.body.description, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             price: req.body.price,
-            country: req.body.country,
+            country: DOMPurify.sanitize(req.body.country, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             travelPeriod: travelPeriod
         };
 
@@ -182,7 +187,7 @@ exports.travel_itineraries_add = (req, res) => {
     var itinerary = {
         travelid: req.params.id,
         day: req.body.day,
-        activity: req.body.activity,
+        activity: DOMPurify.sanitize(req.body.activity, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
     };
 
     travelDB.createItineraryById(itinerary, function (err, result) {
