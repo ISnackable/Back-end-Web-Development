@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
+    <title>SP Travel - Admin Manage Itinerary</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../assets/node_modules/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/adminstyle.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="css/colors/default.css" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="fix-header card-no-border fix-sidebar">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Admin Wrap</p>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <!-- ============================================================== -->
+                <!-- Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;SP Travel</span>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
+                                href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>
+                        <!-- ============================================================== -->
+                        <!-- Search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item hidden-xs-down search-box"> <a
+                                class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i
+                                    class="fa fa-search"></i></a>
+                            <form class="app-search">
+                                <input type="text" class="form-control" placeholder="Search & enter"> <a
+                                    class="srh-btn"><i class="fa fa-times"></i></a> </form>
+                        </li>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav my-lg-0">
+                        <!-- ============================================================== -->
+                        <!-- Profile -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown u-pro">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic"
+                                id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"><img src="../assets/images/users/1.jpg" alt="user" class="" />
+                                <span class="hidden-md-down username"> &nbsp;</span> </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" id="logout">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li> <a class="waves-effect waves-dark" href="/admin" aria-expanded="false"><i
+                                    class="fa fa-tachometer"></i><span class="hide-menu">Dashboard</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
+                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="/manage-travel" aria-expanded="false"><i
+                                    class="fa fa-globe"></i><span class="hide-menu">Manage Tour Package</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="/manage-itinerary" aria-expanded="false"><i
+                                    class="fa fa-plane"></i><span class="hide-menu">Manage Tour Itinerary</span></a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 align-self-center">
+                        <h3 class="text-themecolor">Manage Tour Itinerary</h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                            <li class="breadcrumb-item active">Manage Tour Itinerary</li>
+                        </ol>
+                    </div>
+
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- column -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tour Title</th>
+                                                <th>Country</th>
+                                                <th>Tour Cost</th>
+                                                <th>Travel Month</th>
+                                                <th>No. of Days</th>
+                                                <th>Add</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-body">
+                                            <!-- To be populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer">
+                © 2018 Adminwrap by wrappixel.com
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../assets/node_modules/jquery/jquery.min.js"></script>
+    <script src="js/admin.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../assets/node_modules/bootstrap/js/popper.min.js"></script>
+    <script src="../assets/node_modules/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="js/perfect-scrollbar.jquery.min.js"></script>
+    <!--Wave Effects -->
+    <script src="js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="js/custom.min.js"></script>
+    <!-- jQuery peity -->
+    <script src="../assets/node_modules/peity/jquery.peity.min.js"></script>
+    <script src="../assets/node_modules/peity/jquery.peity.init.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/loginbutton.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="js/purify.min.js"></script>
+    <script>
+        function createCard(index, id, title, price, country, travelPeriod) {
+            var date = new Date(travelPeriod);
+            var month = date.getUTCMonth() + 1; // Since getUTCMonth() returns month from 0-11 not 1-12
+            var year = date.getUTCFullYear();
+
+            const template =
+                `
+            <tr>
+                <td>${id}</td>
+                <td>${title}</td>
+                <td>${country}</td>
+                <td>$${price}</td>
+                <td>${year + '-' + month}</td>
+                <td id="itinerary-travel-${id}"></td>
+                <td><button class="btn btn-sm" data-toggle="modal" data-target="#travel-${id}">Add</button></td>
+                <td>
+                    <div class="modal fade" id="travel-${id}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Tour Itinerary</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="travel-${id}-message">
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="travel-${id}-itinerary-day">Day:</label>
+                                    <div>
+                                        <input class="form-control" type="number" value="1" id="travel-${id}-itinerary-day" min="1" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="travel-${id}-itinerary-description">Description:</label>
+                                    <textarea class="form-control" rows="5" id="travel-${id}-itinerary-description" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right add-button" data-index=${index}>Add</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+            `
+
+            return template;
+        }
+
+        function getItinerary(id) {
+            axios.get(`http://localhost:8081/travel/${id}/itinerary`)
+                .then((reponse) => {
+                    number_of_day = reponse.data.length;
+                    $(`#itinerary-travel-${id}`).text(number_of_day);
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        $(`#itinerary-travel-${id}`).text(0);
+                    }
+                    else {
+                        console.error(error)
+                    }
+                })
+        }
+
+        $(document).ready(function () {
+            let travels;
+            const baseUrl = "http://localhost:8081";
+
+            axios.get(`${baseUrl}/travel/`)
+                .then((response) => {
+                    travels = response.data;
+                    $("#table-body").empty();
+
+                    travels.forEach((travel, index) => {
+                        var card = createCard(index, travel.travelid, travel.title, travel.price, travel.country, travel.travelPeriod);
+                        $("#table-body").append(card);
+                        getItinerary(travel.travelid);
+                    });
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        // console.log("Not Found!")
+                        $(`#table-body`).text("No travels yet");
+                    }
+                    else {
+                        console.error(error);
+                    }
+                });
+
+            $(document).on("click", ".add-button", function (event) {
+                event.preventDefault()
+
+                const index = parseInt($(this).attr("data-index"));
+                const travel = travels[index];
+
+                var itinerary_day = $(`#travel-${travel.travelid}-itinerary-day`).val();
+                var itinerary_description = DOMPurify.sanitize($(`#travel-${travel.travelid}-itinerary-description`).val(), { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: { html: false } });
+
+                if (itinerary_day !== "" && itinerary_description !== "") {
+                    const requestBody = {
+                        day: itinerary_day,
+                        activity: itinerary_description
+                    };
+
+                    axios.post(`${baseUrl}/travel/${travel.travelid}/itinerary`,
+                        requestBody,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem("token")}`
+                            }
+                        })
+                        .then((res) => {
+                            $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-success text-center" role="alert" id="travel-${travel.travelid}-message">Successfully added itinerary</div>`);
+                        })
+                        .catch((error) => {
+                            if (error.response.status === 404) {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Opps, travel not found!</div>`);
+                            }
+                            else if (error.response.status === 409) {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Itinerary has already been added!</div>`);
+                            }
+                            else {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-danger text-center" role="alert" id="travel-${travel.travelid}-message">Opps, something went wrong</div>`);
+                                console.error(error);
+                            }
+                        })
+                        .finally(() => {
+                            $(`#travel-${travel.travelid}-message`).fadeOut(2400);
+                            setTimeout(function () {
+                                $(`#travel-${travel.travelid}-message`).replaceWith(`<div id="travel-${travel.travelid}-message"></div>`);
+                            }, 2500)
+                            getItinerary(travel.travelid);
+                        })
+                } else {
+                    $(`#travel-${travel.travelid}-message`).replaceWith(`<div class="alert alert-warning text-center" role="alert" id="travel-${travel.travelid}-message">Fill in the required box.</div>`);
+                    $(`#travel-${travel.travelid}-message`).fadeOut(2400);
+                    setTimeout(function () {
+                        $(`#travel-${travel.travelid}-message`).replaceWith(`<div id="travel-${travel.travelid}-message"></div>`);
+                    }, 2500)
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
