@@ -74,11 +74,12 @@ DB_PASSWORD=<database password>
 DB_DATABASE=sptravel
 SECRET=<jwt secret key>
 ```
-3. Open `Back-end-Web-Development/server/docs/sptravel2020-06-18.sql`, select and copy all and paste it in MySQL Workbench
-4. Execute the MySQL statements you copied to MySQL Workbench by clicking the yellow lightning symbol ⚡
+3. Open MySQL Workbench, click on Server tab > Data Import. Make sure that "Import from Dump Project Folder" is checked, click on the "..." and select `Back-end-Web-Development/server/docs/SPTravel_Dump2020-08-06` folder. 
+4. Make sure that sptravel schema is checked and click on "Start Import".
 5. Open `Back-end-Web-Development/server/docs/Assignment.postman_collection.json`, and import it into Postman by clicking import and dragging the file into it
 
 ### Usage
+
 To start trying out the web, follow the steps below.
 
 1. Make sure you have all of the dependencies installed
