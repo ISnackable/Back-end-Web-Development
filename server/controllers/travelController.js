@@ -70,13 +70,14 @@ exports.travel_list = (req, res) => {
 // Used to add a new travel listing listing to the database. POST REQUEST
 exports.travel_add = (req, res) => {
     var travelPeriod = new Date(req.body.travelPeriod);
+    var price = req.body.price;
 
     // Check if travelPeriod request is valid 
-    if (travelPeriod instanceof Date && !isNaN(travelPeriod)) {
+    if (travelPeriod instanceof Date && !isNaN(travelPeriod) && utils.isNumeric(price) && parseFloat(price) > 0) {
         var travel = {
             title: DOMPurify.sanitize(req.body.title, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             description: DOMPurify.sanitize(req.body.description, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
-            price: req.body.price,
+            price: price,
             country: DOMPurify.sanitize(req.body.country, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             travelPeriod: travelPeriod
         };
@@ -127,13 +128,14 @@ exports.travel_delete = (req, res) => {
 exports.travel_update = (req, res) => {
     var travelPeriod = new Date(req.body.travelPeriod);
     var id = req.params.id;
+    var price = req.body.price;
 
-    if ((travelPeriod instanceof Date && !isNaN(travelPeriod)) && utils.isNumeric(id)) {
+    if ((travelPeriod instanceof Date && !isNaN(travelPeriod)) && utils.isNumeric(id) && utils.isNumeric(price) && parseFloat(price) > 0) {
         var travel = {
             id: id,
             title: DOMPurify.sanitize(req.body.title, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             description: DOMPurify.sanitize(req.body.description, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
-            price: req.body.price,
+            price: price,
             country: DOMPurify.sanitize(req.body.country, { SAFE_FOR_TEMPLATES: true, SAFE_FOR_JQUERY: true, USE_PROFILES: {html: false}}),
             travelPeriod: travelPeriod
         };
@@ -204,7 +206,7 @@ exports.travel_itineraries_add = (req, res) => {
             else if (err.code == 'ER_DUP_ENTRY') {
                 res.status(409).send("Conflict. Duplicated entry found!");
             }
-            else if (err.code == 'ER_BAD_NULL_ERROR') {
+            else if (err.code == 'ER_BAD_NULL_ERROR' || err.code == 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD') {
                 res.status(400).send("Bad Request");
             }
             else {

@@ -586,7 +586,7 @@
                 <tr>
                     <td>${id}</td>
                     <td><input id="update-tour-${index}-title" class="form-control" type="text" placeholder="Tour Title" value="${title}" style="width:10em;" required></td>
-                    <td><input id="update-tour-${index}-price" class="form-control" type="number" placeholder="Tour Cost" value="${price}" style="width:5.5em;" required></td>
+                    <td><input id="update-tour-${index}-price" class="form-control" type="number" placeholder="Tour Cost" value="${price}" min="0" style="width:5.5em;" required></td>
                     <td><input id="update-tour-${index}-date" class="form-control" type="month" value="${year}-${month}" required></td>
                     <td>
                         <select id="update-tour-${index}-country" class="form-control form-control-line" style="width:10em;" required>
