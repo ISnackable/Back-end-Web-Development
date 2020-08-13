@@ -37,7 +37,7 @@ var travelDB = {
 
         values = ['%'+travel.country+'%', travel.travelPeriod];
         if (travel.price != undefined && travel.price != null && travel.price != "") {
-            sql += 'AND t.price <= ?'
+            sql += ' AND t.price <= ?'
             values.push(travel.price);
         }
 
